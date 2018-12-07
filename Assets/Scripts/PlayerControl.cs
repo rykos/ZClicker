@@ -4,14 +4,15 @@ using UnityEngine;
 
 public class PlayerControl : MonoBehaviour
 {
-    private Vector2 clickStarted;
+    private Vector2 clickStarted = Vector2.zero;
+    private float timePressed = 0;
     
     private void Update()
     {
-        Swipe();
+        UserClick();
     }
-
-    private void Swipe()
+    
+    private void UserClick()
     {
         if (Input.GetMouseButtonDown(0))
         {
@@ -20,9 +21,16 @@ public class PlayerControl : MonoBehaviour
         if (Input.GetMouseButtonUp(0) && clickStarted != Vector2.zero)
         {
             Vector2 direction = (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition) - clickStarted;
+            float directionDegrees = SignedDegToDeg(-Vector2.SignedAngle(direction, Vector2.right));
+            float magnitude = Mathf.Sqrt(Mathf.Pow(direction.x, 2) + Mathf.Pow(direction.y, 2));
+            Click click = new Click(directionDegrees, magnitude, timePressed);
+            timePressed = 0;
             clickStarted = Vector2.zero;
-            float degrees = SignedDegToDeg(-Vector2.SignedAngle(direction, Vector2.right));
-            DegToDirection(degrees);
+            ConsiderClick(click);
+        }
+        if (clickStarted != Vector2.zero)
+        {
+            timePressed += Time.deltaTime;
         }
     }
 
@@ -30,7 +38,7 @@ public class PlayerControl : MonoBehaviour
     {
         if (signedDeg < 0)
         {
-            signedDeg = 180 - (180 + signedDeg);
+            signedDeg = 180 + (180 + signedDeg);
         }
         return signedDeg;
     }
@@ -47,5 +55,31 @@ public class PlayerControl : MonoBehaviour
             direction = Vector2.left;
         }
         return Vector2.zero;
+    }
+
+    private void ConsiderClick(Click click)
+    {
+        if (click.time < 0.05f || click.magnitude < 0.2f)//Tap
+        {
+
+        }
+        else if (click.magnitude > 0.5f)//Swipe
+        {
+
+        }
+    }
+}
+
+struct Click
+{
+    public float direction; //degree
+    public float magnitude;
+    public float time;
+
+    public Click(float direction, float magnitude, float time)
+    {
+        this.direction = direction;
+        this.magnitude = magnitude;
+        this.time = time;
     }
 }
