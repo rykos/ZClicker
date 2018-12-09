@@ -14,14 +14,14 @@ public class MapManager : MonoBehaviour
     #endregion
 
     private BuildingMemory selectedBuilding;
-    private Map map = new Map();
+    public Map map = new Map();
 
     private void Start()
     {
         foreach (BuildingMemory bm in map.Buildings)
         {
             var newBuilding = Instantiate(buildingPrefab, this.transform);
-            newBuilding.transform.localPosition = bm.Position;
+            newBuilding.transform.localPosition = new Vector2(bm.PositionX, 0);
             BuildingManager buildingManager = newBuilding.GetComponent<BuildingManager>();
             LoadIntoBuildingManager(buildingManager, bm);
         }
@@ -44,6 +44,7 @@ public class MapManager : MonoBehaviour
     }
 }
 
+[System.Serializable]
 public class Map
 {
     public List<BuildingMemory> Buildings = new List<BuildingMemory>();
@@ -51,37 +52,39 @@ public class Map
     public Map()
     {
         BuildingMemory Goldmine = new BuildingMemory("Goldmine", "You can mine gold in here", 1, 
-            new Vector2(0, 0), 0, new Goldmine());
+            0, 0, new Goldmine());
         BuildingMemory Blacksmith = new BuildingMemory("Blacksmith", "You can upgrade your hero in here", 1, 
-            new Vector2(6, 0), 0, new Blacksmith());
+            6, 0, new Blacksmith());
         BuildingMemory Alchemist = new BuildingMemory("Alchemist", "Create potions", 1, 
-            new Vector2(-6, 0), 0, new Alchemist());
+            -6, 0, new Alchemist());
         Buildings.Add(Goldmine);
         Buildings.Add(Blacksmith);
         Buildings.Add(Alchemist);
-        Buildings.Sort((x, y) => x.Position.x.CompareTo(y.Position.x));
+        Buildings.Sort((x, y) => x.PositionX.CompareTo(y.PositionX));
+        //
     }
 }
 
 /// <summary>
 /// Holds specific information about building
 /// </summary>
+[System.Serializable]
 public struct BuildingMemory
 {
     public string Name;
     public string Description;
     public int Level;
     public float TimeLeft;
-    public Vector2 Position;
+    public int PositionX;
     public object Type;
 
-    public BuildingMemory(string name, string description, int level, Vector2 position, float timeLeft, object type)
+    public BuildingMemory(string name, string description, int level, int position, float timeLeft, object type)
     {
         this.Name = name;
         this.Description = description;
         this.Level = level;
         this.TimeLeft = timeLeft;
-        this.Position = position;
+        this.PositionX = position;
         this.Type = type;
     }
 }

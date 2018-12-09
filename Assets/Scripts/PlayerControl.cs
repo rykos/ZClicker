@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using System.Xml.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 
 public class PlayerControl : MonoBehaviour
 {
@@ -68,13 +72,15 @@ public class PlayerControl : MonoBehaviour
         {
             if (click.direction < 90 || click.direction > 270)//right
             {
-                Debug.Log("Right");
-                GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraController>().MoveTo(GameObject.Find("Map").GetComponent<MapManager>().NextBuilding(Vector2.right).Position);
+                GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraController>().
+                    MoveTo(new Vector2(GameObject.Find("Map").GetComponent<MapManager>().
+                    NextBuilding(Vector2.left).PositionX, 0));
             }
             else//left
             {
-                Debug.Log("Left");
-                GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraController>().MoveTo(GameObject.Find("Map").GetComponent<MapManager>().NextBuilding(Vector2.left).Position);
+                GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraController>().
+                    MoveTo(new Vector2(GameObject.Find("Map").GetComponent<MapManager>().
+                    NextBuilding(Vector2.right).PositionX, 0));
             }
         }
     }

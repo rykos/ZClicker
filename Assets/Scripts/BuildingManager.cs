@@ -30,6 +30,7 @@ public class BuildingManager : MonoBehaviour
     }
 }
 
+[System.Serializable]
 public abstract class Building
 {
     public string Name;
@@ -38,6 +39,7 @@ public abstract class Building
     public abstract void BuildingInteract();//Building tapped
 }
 
+[System.Serializable]
 public class Goldmine : Building
 {
     public override void BuildingInteract()
@@ -46,6 +48,7 @@ public class Goldmine : Building
     }
 }
 
+[System.Serializable]
 public class Alchemist : Building
 {
     public override void BuildingInteract()
@@ -54,6 +57,7 @@ public class Alchemist : Building
     }
 }
 
+[System.Serializable]
 public class Blacksmith : Building
 {
     public override void BuildingInteract()
