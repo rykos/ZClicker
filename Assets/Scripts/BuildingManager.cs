@@ -6,11 +6,12 @@ using UnityEngine.EventSystems;
 
 public class BuildingManager : MonoBehaviour
 {
+    #region Building specific
     public string buildingName;
     public string buildingDescription;
     public int buildingLevel;
-    public object x;
     private Building building;
+    #endregion
 
     public void Build<T>(T type)
     {
@@ -44,7 +45,8 @@ public class Goldmine : Building
 {
     public override void BuildingInteract()
     {
-        Debug.Log("Mining gold");
+        Debug.Log("Mining gold +1");
+        MapManager.player.AddGold(1);
     }
 }
 

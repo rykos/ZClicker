@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using System.IO;
 
 /// <summary>
 /// Contains access to all buildings in town
@@ -12,10 +13,15 @@ public class MapManager : MonoBehaviour
     [SerializeField]
     private GameObject buildingPrefab;
     #endregion
+    public static Player player;//Reference to player
+    private BuildingMemory selectedBuilding;//building the player is currently looking at
+    public Map map;
 
-    private BuildingMemory selectedBuilding;
-    public Map map = new Map();
-
+    private void Awake()
+    {
+        map = new Map(Application.persistentDataPath);
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+    }
     private void Start()
     {
         foreach (BuildingMemory bm in map.Buildings)
@@ -49,19 +55,35 @@ public class Map
 {
     public List<BuildingMemory> Buildings = new List<BuildingMemory>();
 
-    public Map()
+    public Map(string persistentDataPath)
     {
-        BuildingMemory Goldmine = new BuildingMemory("Goldmine", "You can mine gold in here", 1, 
+        //Try to load save, if there is no file then create new
+        string savePath = Path.Combine(persistentDataPath, "Map.bin");
+        if(File.Exists(savePath))
+        {
+            Debug.Log("SaveLoaded");
+            this.Buildings = SaveManagment.Deserialize<List<BuildingMemory>>(savePath);
+        }
+        else
+        {
+            FirstInit();
+            Debug.Log("FirstInit");
+        }
+    }
+
+    //Needs refactorization
+    private void FirstInit()
+    {
+        BuildingMemory Goldmine = new BuildingMemory("Goldmine", "You can mine gold in here", 1,
             0, 0, new Goldmine());
-        BuildingMemory Blacksmith = new BuildingMemory("Blacksmith", "You can upgrade your hero in here", 1, 
+        BuildingMemory Blacksmith = new BuildingMemory("Blacksmith", "You can upgrade your hero in here", 1,
             6, 0, new Blacksmith());
-        BuildingMemory Alchemist = new BuildingMemory("Alchemist", "Create potions", 1, 
+        BuildingMemory Alchemist = new BuildingMemory("Alchemist", "Create potions", 1,
             -6, 0, new Alchemist());
         Buildings.Add(Goldmine);
         Buildings.Add(Blacksmith);
         Buildings.Add(Alchemist);
         Buildings.Sort((x, y) => x.PositionX.CompareTo(y.PositionX));
-        //
     }
 }
 

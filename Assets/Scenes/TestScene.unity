@@ -295,6 +295,48 @@ CanvasRenderer:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 746880458}
   m_CullTransparentMesh: 0
+--- !u!1 &772094840
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 772094841}
+  - component: {fileID: 772094842}
+  m_Layer: 0
+  m_Name: Player
+  m_TagString: Player
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &772094841
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 772094840}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &772094842
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 772094840}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ceea8d00672a2f4b9c648716a2bf75f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Resources:
+    Gold: 0
 --- !u!1 &798227481
 GameObject:
   m_ObjectHideFlags: 0
@@ -371,7 +413,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &798227485
 MonoBehaviour:
@@ -395,6 +437,7 @@ GameObject:
   - component: {fileID: 1319634575}
   - component: {fileID: 1319634574}
   - component: {fileID: 1319634577}
+  - component: {fileID: 1319634578}
   m_Layer: 0
   m_Name: EventSystem
   m_TagString: Untagged
@@ -445,7 +488,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1319634577
 MonoBehaviour:
@@ -456,6 +499,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e10209e1fbf4a38419b978c783084ecf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1319634578
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1319634573}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ddc6e287fe47cc1418cac5099b98ae4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1489055871
@@ -469,6 +523,7 @@ GameObject:
   - component: {fileID: 1489055874}
   - component: {fileID: 1489055873}
   - component: {fileID: 1489055872}
+  - component: {fileID: 1489055876}
   m_Layer: 5
   m_Name: UI
   m_TagString: Untagged
@@ -546,13 +601,24 @@ RectTransform:
   - {fileID: 1512411378}
   - {fileID: 746880459}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1489055876
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1489055871}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48c2abf52f3ee8142930a071c030a035, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1512411377
 GameObject:
   m_ObjectHideFlags: 0
@@ -677,7 +743,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_text: 1592
+  m_text: 0
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -745,7 +811,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 1695891754}
-    characterCount: 4
+    characterCount: 1
     spriteCount: 0
     spaceCount: 0
     wordCount: 1
@@ -916,7 +982,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2048118871
 MonoBehaviour:
@@ -931,3 +997,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buildingPrefab: {fileID: 1526104257330828, guid: 43d34c9118135c0478d00f97f8a3c961,
     type: 2}
+  map:
+    Buildings:
+    - Name: Alchemist
+      Description: Create potions
+      Level: 1
+      TimeLeft: 0
+      PositionX: -6
+    - Name: Goldmine
+      Description: You can mine gold in here
+      Level: 1
+      TimeLeft: 0
+      PositionX: 0
+    - Name: Blacksmith
+      Description: You can upgrade your hero in here
+      Level: 1
+      TimeLeft: 0
+      PositionX: 6
