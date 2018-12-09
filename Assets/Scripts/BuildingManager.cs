@@ -9,10 +9,12 @@ public class BuildingManager : MonoBehaviour
     public string buildingName;
     public string buildingDescription;
     public int buildingLevel;
-    private Building building = new TestBuilding();
+    public object x;
+    private Building building;
 
-    private void Start()
+    public void Build<T>(T type)
     {
+        building = (Building)(object)type;
         building.Name = buildingName;
         building.Description = buildingDescription;
         building.Level = buildingLevel;
@@ -36,10 +38,26 @@ public abstract class Building
     public abstract void BuildingInteract();//Building tapped
 }
 
-public class TestBuilding : Building
+public class Goldmine : Building
 {
     public override void BuildingInteract()
     {
-        Debug.Log("Building clicked");
+        Debug.Log("Mining gold");
+    }
+}
+
+public class Alchemist : Building
+{
+    public override void BuildingInteract()
+    {
+        Debug.Log("Alchemist tapped");
+    }
+}
+
+public class Blacksmith : Building
+{
+    public override void BuildingInteract()
+    {
+        Debug.Log("Blacksmith tapped");
     }
 }
