@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.EventSystems;
 
 public class BuildingManager : MonoBehaviour
 {
@@ -21,7 +22,10 @@ public class BuildingManager : MonoBehaviour
     //Building collider clicked
     private void OnMouseDown()
     {
-        building.BuildingInteract();
+        if (!EventSystem.current.IsPointerOverGameObject())
+        {
+            building.BuildingInteract();
+        }
     }
 }
 
