@@ -6,17 +6,16 @@ using UnityEngine.EventSystems;
 
 public class BuildingManager : MonoBehaviour
 {
-    [SerializeField]
-    private string buildingName;
-    [SerializeField]
-    private string buildingDescription;
+    public string buildingName;
+    public string buildingDescription;
+    public int buildingLevel;
     private Building building = new TestBuilding();
 
     private void Start()
     {
         building.Name = buildingName;
         building.Description = buildingDescription;
-        building.Level = 1;
+        building.Level = buildingLevel;
     }
 
     //Building collider clicked
@@ -41,6 +40,6 @@ public class TestBuilding : Building
 {
     public override void BuildingInteract()
     {
-        Debug.Log("Building interaction");
+        Debug.Log("Building clicked");
     }
 }

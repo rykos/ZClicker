@@ -66,7 +66,16 @@ public class PlayerControl : MonoBehaviour
         }
         else if (click.magnitude > 0.5f)//Swipe
         {
-
+            if (click.direction < 90 || click.direction > 270)//right
+            {
+                Debug.Log("Right");
+                GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraController>().MoveTo(GameObject.Find("Map").GetComponent<MapManager>().NextBuilding(Vector2.right).Position);
+            }
+            else//left
+            {
+                Debug.Log("Left");
+                GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraController>().MoveTo(GameObject.Find("Map").GetComponent<MapManager>().NextBuilding(Vector2.left).Position);
+            }
         }
     }
 }
