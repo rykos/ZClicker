@@ -6,36 +6,32 @@ using System.Xml.Serialization;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Linq;
 
 public class PlayerControl : MonoBehaviour
 {
-    private Vector2 clickStarted = Vector2.zero;
-    private float timePressed = 0;
+    private List<Click> activeClicks = new List<Click>();
     
     private void Update()
     {
-        UserClick();
-    }
-    
-    private void UserClick()
-    {
-        if (Input.GetMouseButtonDown(0))
+        foreach (Touch touch in Input.touches)
         {
-            clickStarted = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        }
-        if (Input.GetMouseButtonUp(0) && clickStarted != Vector2.zero)
-        {
-            Vector2 direction = (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition) - clickStarted;
-            float directionDegrees = SignedDegToDeg(-Vector2.SignedAngle(direction, Vector2.right));
-            float magnitude = Mathf.Sqrt(Mathf.Pow(direction.x, 2) + Mathf.Pow(direction.y, 2));
-            Click click = new Click(directionDegrees, magnitude, timePressed);
-            timePressed = 0;
-            clickStarted = Vector2.zero;
-            ConsiderClick(click);
-        }
-        if (clickStarted != Vector2.zero)
-        {
-            timePressed += Time.deltaTime;
+            if (touch.phase == TouchPhase.Began)
+            {
+                Click click = new Click(touch.fingerId, touch.position);
+                activeClicks.Add(click);
+            }
+            else if (touch.phase == TouchPhase.Ended)
+            {
+                int index = activeClicks.FindIndex(click => click.fingerId == touch.fingerId);
+                ConsiderClick(activeClicks[index], touch.position);
+                activeClicks.Remove(activeClicks[index]);
+            }
+            else
+            {
+                int index = activeClicks.FindIndex(click => click.fingerId == touch.fingerId);
+                activeClicks[index] = activeClicks[index].AddTime(Time.deltaTime);
+            }
         }
     }
 
@@ -62,15 +58,21 @@ public class PlayerControl : MonoBehaviour
         return Vector2.zero;
     }
 
-    private void ConsiderClick(Click click)
+    private void ConsiderClick(Click click, Vector2 newPosition)
     {
-        if (click.time < 0.05f || click.magnitude < 0.2f)//Tap
+        Vector2 activePosition = Camera.main.ScreenToWorldPoint(newPosition);
+        Vector2 directionVector = activePosition - (Vector2)Camera.main.ScreenToWorldPoint(click.startVector);
+        float magnitude = Mathf.Sqrt(Mathf.Pow(directionVector.x, 2) + Mathf.Pow(directionVector.y, 2));
+        float direction = SignedDegToDeg(-Vector2.SignedAngle(directionVector, Vector2.right));
+
+        if (click.time < 0.07f || magnitude < 0.2f)//Tap
         {
 
         }
-        else if (click.magnitude > 0.5f)//Swipe
+        else if (magnitude > 2f)//Swipe
         {
-            if (click.direction < 90 || click.direction > 270)//right
+            Debug.Log("Swipe detected " + magnitude);
+            if (direction < 90 || direction > 270)//right
             {
                 GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraController>().
                     MoveTo(new Vector2(GameObject.Find("Map").GetComponent<MapManager>().
@@ -88,14 +90,19 @@ public class PlayerControl : MonoBehaviour
 
 struct Click
 {
-    public float direction; //degree
-    public float magnitude;
+    public int fingerId;
+    public Vector2 startVector;
     public float time;
 
-    public Click(float direction, float magnitude, float time)
+    public Click(int fingerId, Vector2 startVector, float time = 0)
     {
-        this.direction = direction;
-        this.magnitude = magnitude;
         this.time = time;
+        this.fingerId = fingerId;
+        this.startVector = startVector;
+    }
+    
+    public Click AddTime(float amount)
+    {
+        return new Click(fingerId, startVector, time + amount);
     }
 }

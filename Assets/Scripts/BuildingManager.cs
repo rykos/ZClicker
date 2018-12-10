@@ -24,10 +24,10 @@ public class BuildingManager : MonoBehaviour
     //Building collider clicked
     private void OnMouseDown()
     {
-        if (!EventSystem.current.IsPointerOverGameObject())
-        {
-            building.BuildingInteract();
-        }
+        //if (!EventSystem.current.IsPointerOverGameObject())
+        //{
+        //    building.BuildingInteract();
+        //}
     }
 }
 
