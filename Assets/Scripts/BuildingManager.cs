@@ -29,6 +29,11 @@ public class BuildingManager : MonoBehaviour
         //    building.BuildingInteract();
         //}
     }
+
+    public void Interact()
+    {
+        building.BuildingInteract();
+    }
 }
 
 [System.Serializable]

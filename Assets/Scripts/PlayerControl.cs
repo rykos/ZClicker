@@ -67,7 +67,15 @@ public class PlayerControl : MonoBehaviour
 
         if (click.time < 0.07f || magnitude < 0.2f)//Tap
         {
-
+            if (!IsPointerOverUIObject(newPosition))
+            {
+                Vector2 touchPos = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
+                Collider2D colliderTouched = Physics2D.OverlapPoint(touchPos);
+                if (colliderTouched != null)
+                {
+                    colliderTouched.transform.GetComponent<BuildingManager>().Interact();
+                }
+            }
         }
         else if (magnitude > 2f)//Swipe
         {
@@ -85,6 +93,15 @@ public class PlayerControl : MonoBehaviour
                     NextBuilding(Vector2.right).PositionX, 0));
             }
         }
+    }
+
+    private bool IsPointerOverUIObject(Vector2 touchPos)
+    {
+        PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current);
+        eventDataCurrentPosition.position = new Vector2(touchPos.x, touchPos.y);
+        List<RaycastResult> results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventDataCurrentPosition, results);//collect all ui objects
+        return results.Count > 0;
     }
 }
 
