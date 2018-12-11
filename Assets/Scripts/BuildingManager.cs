@@ -6,12 +6,13 @@ using UnityEngine.EventSystems;
 
 public class BuildingManager : MonoBehaviour
 {
-    #region Building specific
+    #region Building specific predefined
+    public GameObject menu;
     public string buildingName;
     public string buildingDescription;
     public int buildingLevel;
-    private Building building;
     #endregion
+    private Building building;
 
     public void Build<T>(T type)
     {
@@ -19,20 +20,24 @@ public class BuildingManager : MonoBehaviour
         building.Name = buildingName;
         building.Description = buildingDescription;
         building.Level = buildingLevel;
+        PersonalizeBuilding();
     }
 
-    //Building collider clicked
-    private void OnMouseDown()
+    private void PersonalizeBuilding()
     {
-        //if (!EventSystem.current.IsPointerOverGameObject())
-        //{
-        //    building.BuildingInteract();
-        //}
+        GameObject specificUI = GameObject.Find("UI").GetComponent<UIController>().
+            buildingUIs.Find(x => x.gameObject.name == buildingName).gameObject;
+        var specificMenu = Instantiate(specificUI, menu.transform);
     }
 
     public void Interact()
     {
         building.BuildingInteract();
+    }
+
+    public void SwitchMenu()
+    {
+        menu.SetActive(!menu.activeSelf);
     }
 }
 
@@ -43,6 +48,7 @@ public abstract class Building
     public string Description;
     public int Level;
     public abstract void BuildingInteract();//Building tapped
+    public abstract void OpenMenu();
 }
 
 [System.Serializable]
@@ -53,6 +59,11 @@ public class Goldmine : Building
         Debug.Log("Mining gold +1");
         MapManager.player.AddGold(1);
     }
+
+    public override void OpenMenu()
+    {
+        Debug.Log("Mining menu opened");
+    }
 }
 
 [System.Serializable]
@@ -62,6 +73,11 @@ public class Alchemist : Building
     {
         Debug.Log("Alchemist tapped");
     }
+
+    public override void OpenMenu()
+    {
+        Debug.Log("Alchemist menu opened");
+    }
 }
 
 [System.Serializable]
@@ -70,5 +86,10 @@ public class Blacksmith : Building
     public override void BuildingInteract()
     {
         Debug.Log("Blacksmith tapped");
+    }
+
+    public override void OpenMenu()
+    {
+        Debug.Log("Blacksmith menu opened");
     }
 }

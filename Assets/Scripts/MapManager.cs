@@ -74,15 +74,12 @@ public class Map
     //Needs refactorization
     private void FirstInit()
     {
-        BuildingMemory Goldmine = new BuildingMemory("Goldmine", "You can mine gold in here", 1,
-            0, 0, new Goldmine());
-        BuildingMemory Blacksmith = new BuildingMemory("Blacksmith", "You can upgrade your hero in here", 1,
-            6, 0, new Blacksmith());
-        BuildingMemory Alchemist = new BuildingMemory("Alchemist", "Create potions", 1,
-            -6, 0, new Alchemist());
-        Buildings.Add(Goldmine);
-        Buildings.Add(Blacksmith);
-        Buildings.Add(Alchemist);
+        Buildings.Add(new BuildingMemory("Goldmine", "You can mine gold in here", 1,
+            0, 0, new Goldmine()));
+        Buildings.Add(new BuildingMemory("Blacksmith", "You can upgrade your hero in here", 1,
+            6, 0, new Blacksmith()));
+        Buildings.Add(new BuildingMemory("Alchemist", "Create potions", 1,
+            -6, 0, new Alchemist()));
         Buildings.Sort((x, y) => x.PositionX.CompareTo(y.PositionX));
     }
 }

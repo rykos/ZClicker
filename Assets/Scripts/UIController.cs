@@ -9,6 +9,7 @@ using UnityEngine.UI;
 /// </summary>
 public class UIController : MonoBehaviour
 {
+    public List<GameObject> buildingUIs = new List<GameObject>();
     private Resources playerResources;
     private TextMeshProUGUI gold;
 
