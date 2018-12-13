@@ -56,7 +56,6 @@ public class Goldmine : Building
 {
     public override void BuildingInteract()
     {
-        Debug.Log("Mining gold +1");
         MapManager.player.AddGold(1);
     }
 

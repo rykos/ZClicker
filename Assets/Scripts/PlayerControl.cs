@@ -60,6 +60,10 @@ public class PlayerControl : MonoBehaviour
 
     private void ConsiderClick(Click click, Vector2 newPosition)
     {
+        if (IsPointerOverUIObject(newPosition))
+        {
+            return;
+        }
         Vector2 activePosition = Camera.main.ScreenToWorldPoint(newPosition);
         Vector2 directionVector = activePosition - (Vector2)Camera.main.ScreenToWorldPoint(click.startVector);
         float magnitude = Mathf.Sqrt(Mathf.Pow(directionVector.x, 2) + Mathf.Pow(directionVector.y, 2));
@@ -77,7 +81,7 @@ public class PlayerControl : MonoBehaviour
                 }
             }
         }
-        else if (magnitude > 2f)//Swipe
+        else if (magnitude > 1.5f)//Swipe
         {
             Debug.Log("Swipe detected " + magnitude);
             if (direction < 90 || direction > 270)//right
