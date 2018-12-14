@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using UnityEngine.EventSystems;
+using System;
 
 public class BuildingManager : MonoBehaviour
 {
@@ -13,6 +14,13 @@ public class BuildingManager : MonoBehaviour
     public int buildingLevel;
     #endregion
     private Building building;
+    public Building Building
+    {
+        get
+        {
+            return this.building;
+        }
+    }
 
     public void Build<T>(T type)
     {
@@ -28,6 +36,12 @@ public class BuildingManager : MonoBehaviour
         GameObject specificUI = GameObject.Find("UI").GetComponent<UIController>().
             buildingUIs.Find(x => x.gameObject.name == buildingName).gameObject;
         var specificMenu = Instantiate(specificUI, menu.transform);
+        building.Init();
+        //Load UpgradeMemory to Upgrades
+        //foreach (UpgradeMemory um in this.building.upgradeMemories)
+        //{
+
+        //}
     }
 
     public void Interact()
@@ -44,24 +58,50 @@ public class BuildingManager : MonoBehaviour
 [System.Serializable]
 public abstract class Building
 {
+    public List<UpgradeMemory> upgradeMemories;
     public string Name;
     public string Description;
     public int Level;
     public abstract void BuildingInteract();//Building tapped
-    public abstract void OpenMenu();
+    public abstract void Init();
 }
 
 [System.Serializable]
 public class Goldmine : Building
 {
+    private BigFloat tapPower = BigFloat.BuildNumber(0f);
     public override void BuildingInteract()
     {
-        MapManager.player.AddGold(1);
+        MapManager.player.AddGold(tapPower);
     }
 
-    public override void OpenMenu()
+    public void CalculateTapPower()
     {
-        Debug.Log("Mining menu opened");
+        BigFloat newTapPower = upgradeMemories.Find(x => x.Name == "Pickaxe").Value;
+        //(int)upgradeMemories.Find(x => x.Name == "").Value;
+        this.tapPower = newTapPower;
+    }
+
+    public override void Init()
+    {
+        if (upgradeMemories == null)
+        {
+            InitUpgrades();
+        }
+        else
+        {
+            Debug.Log("List not empty" + upgradeMemories.Count);
+        }
+        CalculateTapPower();
+    }
+
+    private void InitUpgrades()
+    {
+        Debug.Log("InitUpgrades()");
+        //Only one predefined upgrade
+        upgradeMemories = new List<UpgradeMemory>();
+        UpgradeMemory um = new UpgradeMemory("Pickaxe", 1, BigFloat.BuildNumber(1f), BigFloat.BuildNumber(10f), UpgradeType.ResourceOnTap);
+        upgradeMemories.Add(um);
     }
 }
 
@@ -73,9 +113,9 @@ public class Alchemist : Building
         Debug.Log("Alchemist tapped");
     }
 
-    public override void OpenMenu()
+    public override void Init()
     {
-        Debug.Log("Alchemist menu opened");
+        Debug.Log("Init");
     }
 }
 
@@ -87,8 +127,39 @@ public class Blacksmith : Building
         Debug.Log("Blacksmith tapped");
     }
 
-    public override void OpenMenu()
+    public override void Init()
     {
-        Debug.Log("Blacksmith menu opened");
+        Debug.Log("Init");
     }
+}
+
+//Represents each upgrade object memory
+[System.Serializable]
+public struct UpgradeMemory
+{
+    public string Name;//Building Name
+    public int Level;//Building level
+    public BigFloat Value;//Building use value
+    public BigFloat Cost;//Cost to upgrade
+    public DateTime? FinishTime;//Time at which action will be completed
+    public UpgradeType UpgradeType;
+
+    public UpgradeMemory(string name, int level, BigFloat value, BigFloat cost, UpgradeType upgradeType, DateTime? finishTime = null)
+    {
+        this.Name = name;
+        this.Level = level;
+        this.Value = value;
+        this.Cost = cost;
+        this.UpgradeType = upgradeType;
+        this.FinishTime = finishTime;
+    }
+    public override string ToString()
+    {
+        return string.Format("Name:{0} Level:{1} Value:{2}", this.Name, this.Level, this.Value);
+    }
+}
+
+public enum UpgradeType
+{
+    ResourceOnTap,
 }

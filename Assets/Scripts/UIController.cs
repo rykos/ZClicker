@@ -26,8 +26,14 @@ public class UIController : MonoBehaviour
         SetUiGold(playerResources.Gold);
     }
 
-    public void SetUiGold(int amount)
+    public void SetUiGold(BigFloat amount)
     {
         gold.text = amount.ToString();
+    }
+
+    public void UpdateBuildingUpgrade(UpgradeMemory upgrade, GameObject item)
+    {
+        Debug.Log("Typing cost " + upgrade.Cost);
+        item.transform.Find("Cost").GetComponent<TextMeshProUGUI>().text = upgrade.Cost.ToString();
     }
 }

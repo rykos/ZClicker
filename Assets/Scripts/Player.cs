@@ -20,7 +20,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    public void AddGold(int amount)
+    public void AddGold(BigFloat amount)
     {
         this.Resources.Gold += amount;
     }
@@ -29,5 +29,5 @@ public class Player : MonoBehaviour
 [System.Serializable]
 public class Resources
 {
-    public int Gold;
+    public BigFloat Gold;
 }

@@ -1,0 +1,206 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using System.Linq;
+using System;
+
+public class UpgradeController : MonoBehaviour
+{
+    [SerializeField]
+    private UpgradeControllerData upgrade;
+
+    public void Upgrade()
+    {
+        UpgradeMemory updatedMemory;
+        IUpgrade upgrade = transform.GetComponent<IUpgrade>();
+        if (MemoryExists(upgrade))//Already exist, upgrade
+        {
+            Building building = FindParentBuilding().GetComponent<BuildingManager>().Building;
+            int index = building.upgradeMemories.IndexOf(building.upgradeMemories.Find(bm => bm.Name == this.upgrade.Name));
+            UpgradeMemory um = building.upgradeMemories[index];
+            updatedMemory = NextUpgradeMemory(um);
+            building.upgradeMemories[index] = updatedMemory;
+        }
+        else//Create new upgrade 
+        {
+            UpgradeMemory newUpgradeMemory = new UpgradeMemory
+                (this.upgrade.Name, 1, this.upgrade.Value,
+                this.upgrade.Cost, this.upgrade.upgradeType);
+            updatedMemory = newUpgradeMemory;
+            FindParentBuilding().gameObject.GetComponent<BuildingManager>().Building.upgradeMemories.Add(updatedMemory);
+        }
+        GameObject.Find("UI").GetComponent<UIController>().UpdateBuildingUpgrade(updatedMemory, transform.gameObject);
+    }
+    
+    private UpgradeMemory NextUpgradeMemory(UpgradeMemory upgrade)
+    {
+        //Value, cost, time multiplier
+        UpgradeMemory newMemory = new UpgradeMemory(upgrade.Name, upgrade.Level + 1, upgrade.Value * BigFloat.BuildNumber(this.upgrade.ValueMultiplier), (upgrade.Cost * BigFloat.BuildNumber(this.upgrade.CostMultiplier)), upgrade.UpgradeType);
+        Debug.Log("Created new upgrade: " + newMemory.Level + " " + newMemory.Name);
+        return newMemory;
+    }
+
+    private bool MemoryExists(IUpgrade upgrade)
+    {
+        var result = FindParentBuilding().gameObject.GetComponent<BuildingManager>().Building.upgradeMemories.
+            Find(bm => bm.Name == upgrade.Name);
+        
+        Debug.Log(result.ToString());
+        Debug.Log(upgrade.Name);
+        if (result.Equals(default(UpgradeMemory)))
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
+    private Transform FindParentBuilding()
+    {
+        Transform parentBuilding = transform.parent;
+        while(parentBuilding.GetComponent<BuildingManager>() == null)
+        {
+            parentBuilding = parentBuilding.parent;
+            if (parentBuilding.GetComponent<MapManager>() != null)
+            {
+                throw new System.Exception();
+            }
+        }
+        return parentBuilding;
+    }
+}
+
+interface IUpgrade
+{
+    string Name
+    { get; set; }
+    int Cost
+    { get; set; }
+    float Time
+    { get; set; }
+}
+
+[Serializable]
+struct UpgradeControllerData//Hand tweaked data inside Editor
+{
+    public string Name;
+    public BigFloat Value;
+    public BigFloat Cost;
+    public float BasicUpgradeTime;
+    public UpgradeType upgradeType;
+    //
+    public float ValueMultiplier;
+    public float CostMultiplier;
+    public float TimeMultiplier;
+}
+
+//Struct handling big numbers
+[System.Serializable]
+public struct BigFloat
+{
+    public decimal baseNumber;//base number
+    public int exponent;//e
+    public char? exponentChar;//short name
+    public static Dictionary<int, char> expoChars = new Dictionary<int, char>()
+        {
+            { 0, ' '},
+            { 3, 'K'},
+            { 6, 'M'},
+            { 9, 'B'},
+            { 12, 't'},
+            { 15, 'q'},
+            { 18, 'Q'},
+            { 21, 's'},
+            { 24, 'S'},
+            { 27, 'O'},
+            { 30, 'N'},
+            { 33, 'd'},
+            { 36, 'U'},
+            { 39, 'D'},
+            { 42, 'T'},
+            { 45, 'X'},
+        };
+    public static BigFloat BuildNumber(decimal amount)
+    {
+        if (amount < 1000)
+        {
+            return new BigFloat(amount, 0);
+        }
+        int exponent = (int)Math.Floor(Math.Log10((double)amount));
+        int newExponent = expoChars.Keys.Where(x => x <= exponent).Max();
+        return new BigFloat(amount / (decimal)Math.Pow(10, newExponent), newExponent, expoChars[(int)newExponent]);
+    }
+    public static BigFloat BuildNumber(float amount)
+    {
+        if (amount < 1000)
+        {
+            return new BigFloat((decimal)amount, 0);
+        }
+        int exponent = (int)Math.Floor(Math.Log10((double)amount));
+        int newExponent = expoChars.Keys.Where(x => x <= exponent).Max();
+        return new BigFloat((decimal)amount / (decimal)Math.Pow(10, newExponent), newExponent, expoChars[(int)newExponent]);
+    }
+
+    public BigFloat(decimal number, int exponent, char? expochar = null)
+    {
+        this.baseNumber = number;
+        this.exponent = exponent;
+        this.exponentChar = expochar;
+    }
+
+    public static BigFloat operator +(BigFloat a, BigFloat b)
+    {
+        int commonExponent = Math.Max(a.exponent, b.exponent);
+        int exponentDifference = Math.Abs(a.exponent - b.exponent);
+        int newExponent;
+        decimal newBaseNumber;
+        if (a.exponent > b.exponent)//A
+        {
+            newBaseNumber = b.baseNumber / (decimal)Math.Pow(10, exponentDifference) + a.baseNumber;
+            newExponent = a.exponent;
+        }
+        else//B
+        {
+            newBaseNumber = a.baseNumber / (decimal)Math.Pow(10, exponentDifference) + b.baseNumber;
+            newExponent = b.exponent;
+        }
+        if (newBaseNumber >= 1000)
+        {
+            int exponent = (int)Math.Floor(Math.Log10((double)newBaseNumber));
+            newBaseNumber = newBaseNumber / (decimal)Math.Pow(10, exponent);
+            newExponent += exponent;
+        }
+        return new BigFloat(newBaseNumber, newExponent, GetShortName(newExponent));
+    }
+    public static BigFloat operator *(BigFloat a, BigFloat b)
+    {
+        decimal newBaseNumber = (a.baseNumber * b.baseNumber);
+        int newExponent = a.exponent + b.exponent;
+        if (newBaseNumber >= 1000)
+        {
+            int exponent = (int)Math.Floor(Math.Log10((double)newBaseNumber));
+            newBaseNumber = newBaseNumber / (decimal)Math.Pow(10, exponent);
+            newExponent += exponent;
+        }
+        return new BigFloat(newBaseNumber, newExponent, GetShortName(newExponent));
+    }
+
+    private static Char GetShortName(int exponent)
+    {
+        return expoChars[expoChars.Keys.Where(x => x <= exponent).Max()];
+    }
+
+    public override string ToString()
+    {
+        if (exponent > 0)
+        {
+            return string.Format("{0}{1}", baseNumber.ToString("N1"), exponentChar);
+        }
+        else
+        {
+            return string.Format(baseNumber.ToString("N1"));
+        }
+    }
+}
