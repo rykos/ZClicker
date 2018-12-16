@@ -8,11 +8,17 @@ public class UpgradeController : MonoBehaviour
 {
     [SerializeField]
     private UpgradeControllerData upgrade;
+    private static Player player;
 
     public void Upgrade()
     {
         UpgradeMemory updatedMemory;
         IUpgrade upgrade = transform.GetComponent<IUpgrade>();
+        if (!CollectPay(upgrade))
+        {
+            return;
+        }
+
         if (MemoryExists(upgrade))//Already exist, upgrade
         {
             Building building = FindParentBuilding().GetComponent<BuildingManager>().Building;
@@ -29,7 +35,39 @@ public class UpgradeController : MonoBehaviour
             updatedMemory = newUpgradeMemory;
             FindParentBuilding().gameObject.GetComponent<BuildingManager>().Building.upgradeMemories.Add(updatedMemory);
         }
+        UpgradeAction(upgrade);
         GameObject.Find("UI").GetComponent<UIController>().UpdateBuildingUpgrade(updatedMemory, transform.gameObject);
+    }
+
+    private bool CollectPay(IUpgrade upgrade)
+    {
+        BigFloat amount;
+        if (MemoryExists(upgrade))
+        {
+            Building building = FindParentBuilding().GetComponent<BuildingManager>().Building;
+            int index = building.upgradeMemories.IndexOf(building.upgradeMemories.Find(bm => bm.Name == this.upgrade.Name));
+            UpgradeMemory um = building.upgradeMemories[index];
+            amount = um.Cost;
+        }
+        else
+        {
+            amount = (this.upgrade.Cost);
+        }
+        if (player.Resources.Gold >= amount)
+        {
+            player.Resources.Gold -= amount;
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    private void UpgradeAction(IUpgrade upgrade)
+    {
+        Building building = FindParentBuilding().gameObject.GetComponent<BuildingManager>().Building;
+        upgrade.Interact(building);
     }
     
     private UpgradeMemory NextUpgradeMemory(UpgradeMemory upgrade)
@@ -44,9 +82,6 @@ public class UpgradeController : MonoBehaviour
     {
         var result = FindParentBuilding().gameObject.GetComponent<BuildingManager>().Building.upgradeMemories.
             Find(bm => bm.Name == upgrade.Name);
-        
-        Debug.Log(result.ToString());
-        Debug.Log(upgrade.Name);
         if (result.Equals(default(UpgradeMemory)))
         {
             return false;
@@ -70,16 +105,18 @@ public class UpgradeController : MonoBehaviour
         }
         return parentBuilding;
     }
+
+    private void Start()
+    {
+        player = GameObject.Find("Player").GetComponent<Player>();
+    }
 }
 
 interface IUpgrade
 {
     string Name
     { get; set; }
-    int Cost
-    { get; set; }
-    float Time
-    { get; set; }
+    void Interact(Building building);
 }
 
 [Serializable]
@@ -100,7 +137,7 @@ struct UpgradeControllerData//Hand tweaked data inside Editor
 [System.Serializable]
 public struct BigFloat
 {
-    public decimal baseNumber;//base number
+    public float baseNumber;//base number
     public int exponent;//e
     public char? exponentChar;//short name
     public static Dictionary<int, char> expoChars = new Dictionary<int, char>()
@@ -122,7 +159,7 @@ public struct BigFloat
             { 42, 'T'},
             { 45, 'X'},
         };
-    public static BigFloat BuildNumber(decimal amount)
+    public static BigFloat BuildNumber(float amount)
     {
         if (amount < 1000)
         {
@@ -130,20 +167,10 @@ public struct BigFloat
         }
         int exponent = (int)Math.Floor(Math.Log10((double)amount));
         int newExponent = expoChars.Keys.Where(x => x <= exponent).Max();
-        return new BigFloat(amount / (decimal)Math.Pow(10, newExponent), newExponent, expoChars[(int)newExponent]);
-    }
-    public static BigFloat BuildNumber(float amount)
-    {
-        if (amount < 1000)
-        {
-            return new BigFloat((decimal)amount, 0);
-        }
-        int exponent = (int)Math.Floor(Math.Log10((double)amount));
-        int newExponent = expoChars.Keys.Where(x => x <= exponent).Max();
-        return new BigFloat((decimal)amount / (decimal)Math.Pow(10, newExponent), newExponent, expoChars[(int)newExponent]);
+        return new BigFloat(amount / (float)Math.Pow(10, newExponent), newExponent, expoChars[(int)newExponent]);
     }
 
-    public BigFloat(decimal number, int exponent, char? expochar = null)
+    public BigFloat(float number, int exponent, char? expochar = null)
     {
         this.baseNumber = number;
         this.exponent = exponent;
@@ -155,36 +182,136 @@ public struct BigFloat
         int commonExponent = Math.Max(a.exponent, b.exponent);
         int exponentDifference = Math.Abs(a.exponent - b.exponent);
         int newExponent;
-        decimal newBaseNumber;
+        float newBaseNumber;
         if (a.exponent > b.exponent)//A
         {
-            newBaseNumber = b.baseNumber / (decimal)Math.Pow(10, exponentDifference) + a.baseNumber;
+            newBaseNumber = b.baseNumber / (float)Math.Pow(10, exponentDifference) + a.baseNumber;
             newExponent = a.exponent;
         }
         else//B
         {
-            newBaseNumber = a.baseNumber / (decimal)Math.Pow(10, exponentDifference) + b.baseNumber;
+            newBaseNumber = a.baseNumber / (float)Math.Pow(10, exponentDifference) + b.baseNumber;
             newExponent = b.exponent;
         }
         if (newBaseNumber >= 1000)
         {
             int exponent = (int)Math.Floor(Math.Log10((double)newBaseNumber));
-            newBaseNumber = newBaseNumber / (decimal)Math.Pow(10, exponent);
+            newBaseNumber = newBaseNumber / (float)Math.Pow(10, exponent);
+            newExponent += exponent;
+        }
+        return new BigFloat(newBaseNumber, newExponent, GetShortName(newExponent));
+    }
+    public static BigFloat operator -(BigFloat a, BigFloat b)
+    {
+        int commonExponent = Math.Max(a.exponent, b.exponent);
+        int exponentDifference = Math.Abs(a.exponent - b.exponent);
+        int newExponent;
+        float newBaseNumber;
+        if (a.exponent > b.exponent)//A
+        {
+            newBaseNumber = b.baseNumber / (float)Math.Pow(10, exponentDifference) - a.baseNumber;
+            newExponent = a.exponent;
+        }
+        else//B
+        {
+            newBaseNumber = a.baseNumber / (float)Math.Pow(10, exponentDifference) - b.baseNumber;
+            newExponent = b.exponent;
+        }
+        if (newBaseNumber >= 1000)
+        {
+            int exponent = (int)Math.Floor(Math.Log10((double)newBaseNumber));
+            newBaseNumber = newBaseNumber / (float)Math.Pow(10, exponent);
             newExponent += exponent;
         }
         return new BigFloat(newBaseNumber, newExponent, GetShortName(newExponent));
     }
     public static BigFloat operator *(BigFloat a, BigFloat b)
     {
-        decimal newBaseNumber = (a.baseNumber * b.baseNumber);
+        float newBaseNumber = (a.baseNumber * b.baseNumber);
         int newExponent = a.exponent + b.exponent;
         if (newBaseNumber >= 1000)
         {
-            int exponent = (int)Math.Floor(Math.Log10((double)newBaseNumber));
-            newBaseNumber = newBaseNumber / (decimal)Math.Pow(10, exponent);
+            int exponent = (int)Math.Floor(Math.Log10(newBaseNumber));
+            newBaseNumber = newBaseNumber / (float)Math.Pow(10, exponent);
             newExponent += exponent;
         }
         return new BigFloat(newBaseNumber, newExponent, GetShortName(newExponent));
+    }
+    public static bool operator >(BigFloat a, BigFloat b)
+    {
+        if (a.exponent > b.exponent)
+        {
+            return true;
+        }
+        else if (a.exponent == b.exponent)
+        {
+            if (a.baseNumber > b.baseNumber)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        return false;
+    }
+    public static bool operator <(BigFloat b, BigFloat a)
+    {
+        if (a.exponent > b.exponent)
+        {
+            return true;
+        }
+        else if (a.exponent == b.exponent)
+        {
+            if (a.baseNumber > b.baseNumber)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        return false;
+    }
+    public static bool operator >=(BigFloat a, BigFloat b)
+    {
+        if (a.exponent > b.exponent)
+        {
+            return true;
+        }
+        else if (a.exponent == b.exponent)
+        {
+            if (a.baseNumber >= b.baseNumber)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        return false;
+    }
+    public static bool operator <=(BigFloat b, BigFloat a)
+    {
+        if (a.exponent > b.exponent)
+        {
+            return true;
+        }
+        else if (a.exponent == b.exponent)
+        {
+            if (a.baseNumber >= b.baseNumber)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        return false;
     }
 
     private static Char GetShortName(int exponent)

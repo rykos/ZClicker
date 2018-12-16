@@ -63,13 +63,14 @@ public abstract class Building
     public string Description;
     public int Level;
     public abstract void BuildingInteract();//Building tapped
-    public abstract void Init();
+    public abstract void Init();//Load
+    public abstract void OnUpgrade();
 }
 
 [System.Serializable]
 public class Goldmine : Building
 {
-    private BigFloat tapPower = BigFloat.BuildNumber(0f);
+    private BigFloat tapPower = BigFloat.BuildNumber(0);
     public override void BuildingInteract()
     {
         MapManager.player.AddGold(tapPower);
@@ -78,7 +79,6 @@ public class Goldmine : Building
     public void CalculateTapPower()
     {
         BigFloat newTapPower = upgradeMemories.Find(x => x.Name == "Pickaxe").Value;
-        //(int)upgradeMemories.Find(x => x.Name == "").Value;
         this.tapPower = newTapPower;
     }
 
@@ -92,6 +92,11 @@ public class Goldmine : Building
         {
             Debug.Log("List not empty" + upgradeMemories.Count);
         }
+        CalculateTapPower();
+    }
+
+    public override void OnUpgrade()
+    {
         CalculateTapPower();
     }
 
@@ -117,6 +122,11 @@ public class Alchemist : Building
     {
         Debug.Log("Init");
     }
+
+    public override void OnUpgrade()
+    {
+        throw new NotImplementedException();
+    }
 }
 
 [System.Serializable]
@@ -130,6 +140,11 @@ public class Blacksmith : Building
     public override void Init()
     {
         Debug.Log("Init");
+    }
+
+    public override void OnUpgrade()
+    {
+        throw new NotImplementedException();
     }
 }
 

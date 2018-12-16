@@ -33,7 +33,9 @@ public class UIController : MonoBehaviour
 
     public void UpdateBuildingUpgrade(UpgradeMemory upgrade, GameObject item)
     {
-        Debug.Log("Typing cost " + upgrade.Cost);
+        Debug.Log("Upgrade cost cost " + upgrade.Cost);
         item.transform.Find("Cost").GetComponent<TextMeshProUGUI>().text = upgrade.Cost.ToString();
+        item.transform.Find("Level").GetComponent<TextMeshProUGUI>().text = upgrade.Level.ToString();
+        item.transform.Find("Description").GetComponent<TextMeshProUGUI>().text = string.Format("{0} gold per tap", upgrade.Value.ToString());
     }
 }
