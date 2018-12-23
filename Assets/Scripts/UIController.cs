@@ -43,10 +43,11 @@ public class UIController : MonoBehaviour
         item.transform.Find("Description").GetComponent<TextMeshProUGUI>().text = string.Format("{0} gold per tap", upgrade.Value.ToString());
     }
 
-    public void ShowTapValue(GameObject canvas, Vector2 position, string value)
+    public void ShowTapValue(GameObject canvas, Vector2 position, Tap tap)
     {
         var tapValueText = Instantiate(TapValueTextGO, canvas.transform);
         tapValueText.transform.localPosition = position;
-        tapValueText.GetComponent<TextMeshProUGUI>().text = value;
+        tapValueText.GetComponent<TextMeshProUGUI>().text = tap.amount.ToString();
+        tapValueText.GetComponent<TextMeshProUGUI>().color = (tap.critical) ? Color.red : Color.white;
     }
 }

@@ -71,16 +71,18 @@ public abstract class Building
 public class Goldmine : Building
 {
     private BigFloat tapPower = BigFloat.BuildNumber(0);
+    private float critical = 0.05f;
     public override void BuildingInteract(Vector2 TappedPosition)
     {
-        MapManager.player.AddGold(tapPower);
+        Tap tap = ExecuteTap();
+        MapManager.player.AddGold(tap.amount);
         //Show tap value on world UI
         TappedPosition = Camera.main.ScreenToWorldPoint(TappedPosition) + new Vector3(0, -0.792f, 0);
         GameObject.Find("UI").GetComponent<UIController>().ShowTapValue
-            (MapManager.SelectedBuildingGameObject.transform.Find("Building_Canvas").gameObject, TappedPosition, tapPower.ToString());
+            (MapManager.SelectedBuildingGameObject.transform.Find("Building_Canvas").gameObject, TappedPosition, tap);
     }
 
-    public void CalculateTapPower()
+    public void CalculateTaps()
     {
         BigFloat newTapPower = upgradeMemories.Find(x => x.Name == "Pickaxe").Value;
         this.tapPower = newTapPower;
@@ -96,12 +98,12 @@ public class Goldmine : Building
         {
             Debug.Log("List not empty" + upgradeMemories.Count);
         }
-        CalculateTapPower();
+        CalculateTaps();
     }
 
     public override void OnUpgrade()
     {
-        CalculateTapPower();
+        CalculateTaps();
     }
 
     private void InitUpgrades()
@@ -111,6 +113,21 @@ public class Goldmine : Building
         upgradeMemories = new List<UpgradeMemory>();
         UpgradeMemory um = new UpgradeMemory("Pickaxe", 1, BigFloat.BuildNumber(1f), BigFloat.BuildNumber(10f), UpgradeType.ResourceOnTap);
         upgradeMemories.Add(um);
+    }
+
+    private Tap ExecuteTap()
+    {
+        float critB = UnityEngine.Random.Range(0f, 1f);
+        if (critical > critB)
+        {
+            Debug.Log("Critical");
+            return new Tap(tapPower * BigFloat.BuildNumber(2), true);
+        }
+        else
+        {
+            Debug.Log(critical + " < " + critB);
+            return new Tap(tapPower, false);
+        }
     }
 }
 
@@ -181,4 +198,16 @@ public struct UpgradeMemory
 public enum UpgradeType
 {
     ResourceOnTap,
+}
+
+public struct Tap
+{
+    public BigFloat amount;//Tapped amount
+    public bool critical;//Was critical tap
+
+    public Tap(BigFloat amount, bool critical)
+    {
+        this.amount = amount;
+        this.critical = critical;
+    }
 }
