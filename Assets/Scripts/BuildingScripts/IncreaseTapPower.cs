@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-//Increase gold per click
+//Increase gold per click|Obsolete?
 public class IncreaseTapPower : MonoBehaviour, IUpgrade
 {
     private string _name;

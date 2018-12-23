@@ -9,7 +9,11 @@ using UnityEngine.UI;
 /// </summary>
 public class UIController : MonoBehaviour
 {
+    #region Editor
+    [SerializeField]
+    private GameObject TapValueTextGO;
     public List<GameObject> buildingUIs = new List<GameObject>();
+    #endregion
     private Resources playerResources;
     private TextMeshProUGUI gold;
 
@@ -37,5 +41,12 @@ public class UIController : MonoBehaviour
         item.transform.Find("Cost").GetComponent<TextMeshProUGUI>().text = upgrade.Cost.ToString();
         item.transform.Find("Level").GetComponent<TextMeshProUGUI>().text = upgrade.Level.ToString();
         item.transform.Find("Description").GetComponent<TextMeshProUGUI>().text = string.Format("{0} gold per tap", upgrade.Value.ToString());
+    }
+
+    public void ShowTapValue(GameObject canvas, Vector2 position, string value)
+    {
+        var tapValueText = Instantiate(TapValueTextGO, canvas.transform);
+        tapValueText.transform.localPosition = position;
+        tapValueText.GetComponent<TextMeshProUGUI>().text = value;
     }
 }

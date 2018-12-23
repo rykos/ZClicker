@@ -15,6 +15,7 @@ public class MapManager : MonoBehaviour
     #endregion
     public static Player player;//Reference to player
     private BuildingMemory selectedBuilding;//building the player is currently looking at
+    public static GameObject SelectedBuildingGameObject;
     public Map map;
 
     private void Awake()
@@ -32,6 +33,7 @@ public class MapManager : MonoBehaviour
             LoadIntoBuildingManager(buildingManager, bm);
         }
         selectedBuilding = map.Buildings.Find(x => x.Name == "Goldmine");
+        FindBuildingGameobject();
     }
 
     private void LoadIntoBuildingManager(BuildingManager buildingManager, BuildingMemory bm)
@@ -46,7 +48,20 @@ public class MapManager : MonoBehaviour
     {
         int index = map.Buildings.IndexOf(selectedBuilding) + (int)direction.x;
         selectedBuilding = (index >= 0 && index < map.Buildings.Count) ? map.Buildings[index] : selectedBuilding;
+        FindBuildingGameobject();
         return selectedBuilding;
+    }
+
+    private void FindBuildingGameobject()
+    {
+        foreach (Transform child in transform)
+        {
+            if (child.position.x == selectedBuilding.PositionX)
+            {
+                SelectedBuildingGameObject = child.gameObject;
+                break;
+            }
+        }
     }
 }
 

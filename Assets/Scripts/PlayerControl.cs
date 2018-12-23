@@ -11,7 +11,12 @@ using System.Linq;
 public class PlayerControl : MonoBehaviour
 {
     private List<Click> activeClicks = new List<Click>();
-    
+    private MapManager mapManager;
+
+    private void Awake()
+    {
+        this.mapManager = GameObject.Find("Map").GetComponent<MapManager>();
+    }
     private void Update()
     {
         foreach (Touch touch in Input.touches)
@@ -71,31 +76,38 @@ public class PlayerControl : MonoBehaviour
 
         if (click.time < 0.07f || magnitude < 0.2f)//Tap
         {
-            if (!IsPointerOverUIObject(newPosition))
-            {
-                Vector2 touchPos = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
-                Collider2D colliderTouched = Physics2D.OverlapPoint(touchPos);
-                if (colliderTouched != null)
-                {
-                    colliderTouched.transform.GetComponent<BuildingManager>().Interact();
-                }
-            }
+            Tap(newPosition);
         }
         else if (magnitude > 1.5f)//Swipe
         {
-            Debug.Log("Swipe detected " + magnitude);
-            if (direction < 90 || direction > 270)//right
-            {
-                GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraController>().
-                    MoveTo(new Vector2(GameObject.Find("Map").GetComponent<MapManager>().
-                    NextBuilding(Vector2.left).PositionX, 0));
-            }
-            else//left
-            {
-                GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraController>().
-                    MoveTo(new Vector2(GameObject.Find("Map").GetComponent<MapManager>().
-                    NextBuilding(Vector2.right).PositionX, 0));
-            }
+            Swipe(magnitude, direction);
+        }
+    }
+
+    private void Tap(Vector2 newPosition)
+    {
+        Vector2 touchPos = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
+        Collider2D colliderTouched = Physics2D.OverlapPoint(touchPos);
+        if (colliderTouched != null)
+        {
+            colliderTouched.transform.GetComponent<BuildingManager>().Interact(newPosition);
+        }
+    }
+
+    private void Swipe(float magnitude, float direction)
+    {
+        Debug.Log("Swipe detected " + magnitude);
+        if (direction < 90 || direction > 270)//right
+        {
+            GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraController>().
+                MoveTo(new Vector2(GameObject.Find("Map").GetComponent<MapManager>().
+                NextBuilding(Vector2.left).PositionX, 0));
+        }
+        else//left
+        {
+            GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraController>().
+                MoveTo(new Vector2(GameObject.Find("Map").GetComponent<MapManager>().
+                NextBuilding(Vector2.right).PositionX, 0));
         }
     }
 
@@ -105,7 +117,14 @@ public class PlayerControl : MonoBehaviour
         eventDataCurrentPosition.position = new Vector2(touchPos.x, touchPos.y);
         List<RaycastResult> results = new List<RaycastResult>();
         EventSystem.current.RaycastAll(eventDataCurrentPosition, results);//collect all ui objects
-        return results.Count > 0;
+        foreach (RaycastResult res in results)
+        {
+            if (!res.gameObject.CompareTag("UI#IGNORE"))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }
 

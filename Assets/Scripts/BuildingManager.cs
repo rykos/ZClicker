@@ -44,9 +44,9 @@ public class BuildingManager : MonoBehaviour
         //}
     }
 
-    public void Interact()
+    public void Interact(Vector2 TappedPosition)
     {
-        building.BuildingInteract();
+        building.BuildingInteract(TappedPosition);
     }
 
     public void SwitchMenu()
@@ -62,7 +62,7 @@ public abstract class Building
     public string Name;
     public string Description;
     public int Level;
-    public abstract void BuildingInteract();//Building tapped
+    public abstract void BuildingInteract(Vector2 TappedPosition);//Building tapped
     public abstract void Init();//Load
     public abstract void OnUpgrade();
 }
@@ -71,9 +71,13 @@ public abstract class Building
 public class Goldmine : Building
 {
     private BigFloat tapPower = BigFloat.BuildNumber(0);
-    public override void BuildingInteract()
+    public override void BuildingInteract(Vector2 TappedPosition)
     {
         MapManager.player.AddGold(tapPower);
+        //Show tap value on world UI
+        TappedPosition = Camera.main.ScreenToWorldPoint(TappedPosition) + new Vector3(0, -0.792f, 0);
+        GameObject.Find("UI").GetComponent<UIController>().ShowTapValue
+            (MapManager.SelectedBuildingGameObject.transform.Find("Building_Canvas").gameObject, TappedPosition, tapPower.ToString());
     }
 
     public void CalculateTapPower()
@@ -113,7 +117,7 @@ public class Goldmine : Building
 [System.Serializable]
 public class Alchemist : Building
 {
-    public override void BuildingInteract()
+    public override void BuildingInteract(Vector2 TappedPosition)
     {
         Debug.Log("Alchemist tapped");
     }
@@ -132,7 +136,7 @@ public class Alchemist : Building
 [System.Serializable]
 public class Blacksmith : Building
 {
-    public override void BuildingInteract()
+    public override void BuildingInteract(Vector2 TappedPosition)
     {
         Debug.Log("Blacksmith tapped");
     }

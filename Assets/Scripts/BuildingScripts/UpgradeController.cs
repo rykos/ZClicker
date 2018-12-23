@@ -109,6 +109,13 @@ public class UpgradeController : MonoBehaviour
     private void Start()
     {
         player = GameObject.Find("Player").GetComponent<Player>();
+        //Pulling data for app startup
+        UpgradeMemory um = FindParentBuilding().GetComponent<BuildingManager>().Building.upgradeMemories
+            .Find(x => x.Name == this.upgrade.Name);
+        if (!um.Equals(default(UpgradeMemory)))
+        {
+            GameObject.Find("UI").GetComponent<UIController>().UpdateBuildingUpgrade(um, transform.gameObject);
+        }
     }
 }
 
@@ -314,7 +321,7 @@ public struct BigFloat
         return false;
     }
 
-    private static Char GetShortName(int exponent)
+    private static char GetShortName(int exponent)
     {
         return expoChars[expoChars.Keys.Where(x => x <= exponent).Max()];
     }
