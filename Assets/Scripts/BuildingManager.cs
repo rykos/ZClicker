@@ -71,7 +71,7 @@ public abstract class Building
 public class Goldmine : Building
 {
     private BigFloat tapPower = BigFloat.BuildNumber(0);
-    private float critical = 0.05f;
+    private float critical = 0f;
     public override void BuildingInteract(Vector2 TappedPosition)
     {
         Tap tap = ExecuteTap();
@@ -93,10 +93,6 @@ public class Goldmine : Building
         if (upgradeMemories == null)
         {
             InitUpgrades();
-        }
-        else
-        {
-            Debug.Log("List not empty" + upgradeMemories.Count);
         }
         CalculateTaps();
     }
@@ -195,9 +191,15 @@ public struct UpgradeMemory
     }
 }
 
+public enum UpgradeStyle//How upgrade values are calculated
+{
+    Multiply,
+    Add
+}
 public enum UpgradeType
 {
     ResourceOnTap,
+    CriticalTap,
 }
 
 public struct Tap

@@ -13,7 +13,6 @@ public class UpgradeController : MonoBehaviour
     public void Upgrade()
     {
         UpgradeMemory updatedMemory;
-        IUpgrade upgrade = transform.GetComponent<IUpgrade>();
         if (!CollectPay(upgrade))
         {
             return;
@@ -39,7 +38,7 @@ public class UpgradeController : MonoBehaviour
         GameObject.Find("UI").GetComponent<UIController>().UpdateBuildingUpgrade(updatedMemory, transform.gameObject);
     }
 
-    private bool CollectPay(IUpgrade upgrade)
+    private bool CollectPay(UpgradeControllerData upgrade)
     {
         BigFloat amount;
         if (MemoryExists(upgrade))
@@ -64,21 +63,26 @@ public class UpgradeController : MonoBehaviour
         }
     }
 
-    private void UpgradeAction(IUpgrade upgrade)
+    private void UpgradeAction(UpgradeControllerData upgrade)
     {
         Building building = FindParentBuilding().gameObject.GetComponent<BuildingManager>().Building;
-        upgrade.Interact(building);
+        Interact(building);
     }
     
     private UpgradeMemory NextUpgradeMemory(UpgradeMemory upgrade)
     {
-        //Value, cost, time multiplier
-        UpgradeMemory newMemory = new UpgradeMemory(upgrade.Name, upgrade.Level + 1, upgrade.Value * BigFloat.BuildNumber(this.upgrade.ValueMultiplier), (upgrade.Cost * BigFloat.BuildNumber(this.upgrade.CostMultiplier)), upgrade.UpgradeType);
+        BigFloat newValue = (this.upgrade.upgradeStyle == UpgradeStyle.Multiply) ?
+            upgrade.Value * BigFloat.BuildNumber(this.upgrade.ValueMultiplier) :
+            BigFloat.BuildNumber(this.upgrade.ValueMultiplier);
+        UpgradeMemory newMemory = new UpgradeMemory(upgrade.Name, upgrade.Level++,
+            newValue,
+            (upgrade.Cost * BigFloat.BuildNumber(this.upgrade.CostMultiplier)),
+            upgrade.UpgradeType);
         Debug.Log("Created new upgrade: " + newMemory.Level + " " + newMemory.Name);
         return newMemory;
     }
 
-    private bool MemoryExists(IUpgrade upgrade)
+    private bool MemoryExists(UpgradeControllerData upgrade)
     {
         var result = FindParentBuilding().gameObject.GetComponent<BuildingManager>().Building.upgradeMemories.
             Find(bm => bm.Name == upgrade.Name);
@@ -106,6 +110,11 @@ public class UpgradeController : MonoBehaviour
         return parentBuilding;
     }
 
+    private void Interact(Building building)
+    {
+        building.OnUpgrade();
+    }
+
     private void Start()
     {
         player = GameObject.Find("Player").GetComponent<Player>();
@@ -130,10 +139,12 @@ interface IUpgrade
 struct UpgradeControllerData//Hand tweaked data inside Editor
 {
     public string Name;
+    public string Description;
     public BigFloat Value;
     public BigFloat Cost;
     public float BasicUpgradeTime;
     public UpgradeType upgradeType;
+    public UpgradeStyle upgradeStyle;
     //
     public float ValueMultiplier;
     public float CostMultiplier;
