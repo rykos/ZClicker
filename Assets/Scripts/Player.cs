@@ -29,5 +29,6 @@ public class Player : MonoBehaviour
 [System.Serializable]
 public class Resources
 {
+    public object GoldLock = new object();//BetaLock
     public BigFloat Gold;
 }

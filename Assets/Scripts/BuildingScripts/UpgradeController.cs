@@ -17,7 +17,6 @@ public class UpgradeController : MonoBehaviour
         {
             return;
         }
-
         if (MemoryExists(upgrade))//Already exist, upgrade
         {
             Building building = FindParentBuilding().GetComponent<BuildingManager>().Building;
@@ -29,37 +28,40 @@ public class UpgradeController : MonoBehaviour
         else//Create new upgrade 
         {
             UpgradeMemory newUpgradeMemory = new UpgradeMemory
-                (this.upgrade.Name, 1, this.upgrade.Value,
+                (this.upgrade.Name, 0, this.upgrade.Value,
                 this.upgrade.Cost, this.upgrade.upgradeType);
-            updatedMemory = newUpgradeMemory;
+            updatedMemory = NextUpgradeMemory(newUpgradeMemory);
             FindParentBuilding().gameObject.GetComponent<BuildingManager>().Building.upgradeMemories.Add(updatedMemory);
         }
         UpgradeAction(upgrade);
-        GameObject.Find("UI").GetComponent<UIController>().UpdateBuildingUpgrade(updatedMemory, transform.gameObject);
+        GameObject.Find("UI").GetComponent<UIController>().UpdateBuildingUpgrade(updatedMemory, this.upgrade.Description, transform.gameObject);
     }
 
     private bool CollectPay(UpgradeControllerData upgrade)
     {
-        BigFloat amount;
-        if (MemoryExists(upgrade))
+        lock (player.Resources.GoldLock)
         {
-            Building building = FindParentBuilding().GetComponent<BuildingManager>().Building;
-            int index = building.upgradeMemories.IndexOf(building.upgradeMemories.Find(bm => bm.Name == this.upgrade.Name));
-            UpgradeMemory um = building.upgradeMemories[index];
-            amount = um.Cost;
-        }
-        else
-        {
-            amount = (this.upgrade.Cost);
-        }
-        if (player.Resources.Gold >= amount)
-        {
-            player.Resources.Gold -= amount;
-            return true;
-        }
-        else
-        {
-            return false;
+            BigFloat amount;
+            if (MemoryExists(upgrade))
+            {
+                Building building = FindParentBuilding().GetComponent<BuildingManager>().Building;
+                int index = building.upgradeMemories.IndexOf(building.upgradeMemories.Find(bm => bm.Name == this.upgrade.Name));
+                UpgradeMemory um = building.upgradeMemories[index];
+                amount = um.Cost;
+            }
+            else
+            {
+                amount = (this.upgrade.Cost);
+            }
+            if (player.Resources.Gold >= amount)
+            {
+                player.Resources.Gold -= amount;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 
@@ -68,16 +70,27 @@ public class UpgradeController : MonoBehaviour
         Building building = FindParentBuilding().gameObject.GetComponent<BuildingManager>().Building;
         Interact(building);
     }
-    
+
     private UpgradeMemory NextUpgradeMemory(UpgradeMemory upgrade)
     {
-        BigFloat newValue = (this.upgrade.upgradeStyle == UpgradeStyle.Multiply) ?
+        UpgradeMemory newMemory;
+        if (upgrade.Level == 0)//Not bought yet
+        {
+            BigFloat newValue = (this.upgrade.upgradeStyle == UpgradeStyle.Multiply) ?
             upgrade.Value * BigFloat.BuildNumber(this.upgrade.ValueMultiplier) :
-            BigFloat.BuildNumber(this.upgrade.ValueMultiplier);
-        UpgradeMemory newMemory = new UpgradeMemory(upgrade.Name, upgrade.Level++,
-            newValue,
-            (upgrade.Cost * BigFloat.BuildNumber(this.upgrade.CostMultiplier)),
-            upgrade.UpgradeType);
+            upgrade.Value + BigFloat.BuildNumber(this.upgrade.ValueMultiplier);
+            newMemory = new UpgradeMemory(upgrade.Name, upgrade.Level + 1, upgrade.Value, upgrade.Cost, upgrade.UpgradeType);
+        }
+        else//Already bought
+        {
+            BigFloat newValue = (this.upgrade.upgradeStyle == UpgradeStyle.Multiply) ?
+            upgrade.Value * BigFloat.BuildNumber(this.upgrade.ValueMultiplier) :
+            upgrade.Value + BigFloat.BuildNumber(this.upgrade.ValueMultiplier);
+            newMemory = new UpgradeMemory(upgrade.Name, upgrade.Level + 1,
+                newValue,
+                (upgrade.Cost * BigFloat.BuildNumber(this.upgrade.CostMultiplier)),
+                upgrade.UpgradeType);
+        }
         Debug.Log("Created new upgrade: " + newMemory.Level + " " + newMemory.Name);
         return newMemory;
     }
@@ -123,7 +136,11 @@ public class UpgradeController : MonoBehaviour
             .Find(x => x.Name == this.upgrade.Name);
         if (!um.Equals(default(UpgradeMemory)))
         {
-            GameObject.Find("UI").GetComponent<UIController>().UpdateBuildingUpgrade(um, transform.gameObject);
+            GameObject.Find("UI").GetComponent<UIController>().UpdateBuildingUpgrade(um, this.upgrade.Description, transform.gameObject);
+        }
+        else
+        {
+            GameObject.Find("UI").GetComponent<UIController>().UpdateBuildingUpgrade(this.upgrade, transform.gameObject);
         }
     }
 }
@@ -136,7 +153,7 @@ interface IUpgrade
 }
 
 [Serializable]
-struct UpgradeControllerData//Hand tweaked data inside Editor
+public struct UpgradeControllerData//Hand tweaked data inside Editor
 {
     public string Name;
     public string Description;
@@ -336,6 +353,10 @@ public struct BigFloat
     {
         return expoChars[expoChars.Keys.Where(x => x <= exponent).Max()];
     }
+    public static explicit operator float(BigFloat bigFloat)
+    {
+        return bigFloat.baseNumber * (float)(Math.Pow(10, bigFloat.exponent));
+    }
 
     public override string ToString()
     {
@@ -345,7 +366,32 @@ public struct BigFloat
         }
         else
         {
-            return string.Format(baseNumber.ToString("N1"));
+            return string.Format(baseNumber.ToString("N3"));
         }
+    }
+
+    public BigFloatString GetString()
+    {
+        BigFloatString returnValue;
+        if (exponent > 0)
+        {
+            return new BigFloatString(baseNumber, exponentChar.ToString());
+        }
+        else
+        {
+            return new BigFloatString(baseNumber, "");
+        }
+    }
+}
+
+public struct BigFloatString
+{
+    public float Value;
+    public string Exponent;
+
+    public BigFloatString(float value, string expo)
+    {
+        this.Value = value;
+        this.Exponent = expo;
     }
 }

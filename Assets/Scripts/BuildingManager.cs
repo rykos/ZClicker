@@ -53,6 +53,11 @@ public class BuildingManager : MonoBehaviour
     {
         menu.SetActive(!menu.activeSelf);
     }
+
+    private void Update()
+    {
+        building.TimedValue();
+    }
 }
 
 [System.Serializable]
@@ -65,12 +70,14 @@ public abstract class Building
     public abstract void BuildingInteract(Vector2 TappedPosition);//Building tapped
     public abstract void Init();//Load
     public abstract void OnUpgrade();
+    public abstract void TimedValue();
 }
 
 [System.Serializable]
 public class Goldmine : Building
 {
-    private BigFloat tapPower = BigFloat.BuildNumber(0);
+    private BigFloat idleValue = BigFloat.BuildNumber(0);//Value earned per second
+    private BigFloat tapPower = BigFloat.BuildNumber(0);//Value earned per tap
     private float critical = 0f;
     public override void BuildingInteract(Vector2 TappedPosition)
     {
@@ -82,10 +89,20 @@ public class Goldmine : Building
             (MapManager.SelectedBuildingGameObject.transform.Find("Building_Canvas").gameObject, TappedPosition, tap);
     }
 
-    public void CalculateTaps()
+    //Collect tap upgrade variables
+    private void CalculateTaps()
     {
-        BigFloat newTapPower = upgradeMemories.Find(x => x.Name == "Pickaxe").Value;
+        BigFloat newTapPower = CollectValues<BigFloat>(UpgradeType.ResourceOnTap);
+        BigFloat ukValue = BigFloat.BuildNumber((float)CollectValues<BigFloat>(UpgradeType.ResourceOnTapPercent) + 1f);
+        Debug.Log(ukValue);
+        float newCriticalTapChance = CollectValues(UpgradeType.CriticalTap);
         this.tapPower = newTapPower;
+        this.critical = newCriticalTapChance;
+    }
+    private void CalculateValueInTime()
+    {
+        idleValue = CollectValues<BigFloat>(UpgradeType.ValueInTime);
+        Debug.Log("New idle value is " + idleValue.GetString());
     }
 
     public override void Init()
@@ -100,6 +117,7 @@ public class Goldmine : Building
     public override void OnUpgrade()
     {
         CalculateTaps();
+        CalculateValueInTime();
     }
 
     private void InitUpgrades()
@@ -113,16 +131,46 @@ public class Goldmine : Building
 
     private Tap ExecuteTap()
     {
-        float critB = UnityEngine.Random.Range(0f, 1f);
+        float critB = UnityEngine.Random.Range(0f, 100f);
         if (critical > critB)
         {
-            Debug.Log("Critical");
             return new Tap(tapPower * BigFloat.BuildNumber(2), true);
         }
         else
         {
-            Debug.Log(critical + " < " + critB);
             return new Tap(tapPower, false);
+        }
+    }
+
+    private float CollectValues(UpgradeType upgradeType)
+    {
+        float returnValue = 0;
+        List<UpgradeMemory> ValidUpgrades = upgradeMemories.FindAll(x => x.UpgradeType == upgradeType);
+        ValidUpgrades.ForEach(x =>
+        {
+            returnValue += (float)x.Value;
+        });
+        return returnValue;
+    }
+    private BigFloat CollectValues<T>(UpgradeType upgradeType)
+    {
+        BigFloat returnValue = BigFloat.BuildNumber(0);
+        List<UpgradeMemory> ValidUpgrades = upgradeMemories.FindAll(x => x.UpgradeType == upgradeType);
+        ValidUpgrades.ForEach(x =>
+        {
+            returnValue += x.Value;
+        });
+        return returnValue;
+    }
+
+    private float _updateTime = 0;
+    public override void TimedValue()
+    {
+        _updateTime += Time.deltaTime;
+        if (_updateTime > 1)
+        {
+            MapManager.player.AddGold(idleValue);
+            _updateTime = 0;
         }
     }
 }
@@ -144,6 +192,10 @@ public class Alchemist : Building
     {
         throw new NotImplementedException();
     }
+    public override void TimedValue()
+    {
+        //
+    }
 }
 
 [System.Serializable]
@@ -162,6 +214,11 @@ public class Blacksmith : Building
     public override void OnUpgrade()
     {
         throw new NotImplementedException();
+    }
+
+    public override void TimedValue()
+    {
+        //
     }
 }
 
@@ -198,8 +255,10 @@ public enum UpgradeStyle//How upgrade values are calculated
 }
 public enum UpgradeType
 {
-    ResourceOnTap,
-    CriticalTap,
+    ResourceOnTapPercent,//Percentage per tap increase
+    ResourceOnTap,//Raw value per tap increase
+    CriticalTap,//Raw critical value increase
+    ValueInTime//Raw value increase
 }
 
 public struct Tap
