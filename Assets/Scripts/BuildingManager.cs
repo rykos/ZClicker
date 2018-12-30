@@ -94,7 +94,6 @@ public class Goldmine : Building
     {
         BigFloat newTapPower = CollectValues<BigFloat>(UpgradeType.ResourceOnTap);
         BigFloat ukValue = BigFloat.BuildNumber((float)CollectValues<BigFloat>(UpgradeType.ResourceOnTapPercent) + 1f);
-        Debug.Log(ukValue);
         float newCriticalTapChance = CollectValues(UpgradeType.CriticalTap);
         this.tapPower = newTapPower;
         this.critical = newCriticalTapChance;
@@ -102,7 +101,6 @@ public class Goldmine : Building
     private void CalculateValueInTime()
     {
         idleValue = CollectValues<BigFloat>(UpgradeType.ValueInTime);
-        Debug.Log("New idle value is " + idleValue.GetString());
     }
 
     public override void Init()
