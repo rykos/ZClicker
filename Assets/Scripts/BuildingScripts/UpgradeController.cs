@@ -169,7 +169,7 @@ public struct UpgradeControllerData//Hand tweaked data inside Editor
     public float TimeMultiplier;
 }
 
-//Struct handling big numbers
+//Struct handling large numbers
 [System.Serializable]
 public struct BigFloat
 {
@@ -259,7 +259,6 @@ public struct BigFloat
             newBaseNumber = newBaseNumber / (float)Math.Pow(10, exponent);
             newExponent += exponent;
         }
-        Console.WriteLine(newBaseNumber);
         if (newBaseNumber < 1 && newBaseNumber > 0)
         {
             int exponent = (int)Math.Floor(Math.Log10(newBaseNumber));
@@ -268,7 +267,7 @@ public struct BigFloat
         }
         else if (newBaseNumber <= 0)
         {
-
+            newExponent = 0;
         }
         //return new BigFloat(newBaseNumber, newExponent, GetShortName(newExponent));
         return ReBuild(newBaseNumber, newExponent, GetExponent(newExponent));
@@ -282,6 +281,23 @@ public struct BigFloat
             int exponent = (int)Math.Floor(Math.Log10(newBaseNumber));
             newBaseNumber = newBaseNumber / (float)Math.Pow(10, exponent);
             newExponent += exponent;
+        }
+        return new BigFloat(newBaseNumber, newExponent, GetShortName(newExponent));
+    }
+    public static BigFloat operator /(BigFloat a, BigFloat b)
+    {
+        if (a.baseNumber <= 0 || b.baseNumber <= 0)
+        {
+            return BuildNumber(0);
+        }
+        float newBaseNumber = (a.baseNumber / b.baseNumber);
+        int newExponent = a.exponent - b.exponent;
+        if (newBaseNumber < 1)
+        {
+            int expo = PullLowerExponent(newExponent);
+            int expoDifference = newExponent - expo;
+            newExponent = expo;
+            newBaseNumber = newBaseNumber * (float)Math.Pow(10, expoDifference);
         }
         return new BigFloat(newBaseNumber, newExponent, GetShortName(newExponent));
     }
@@ -362,6 +378,15 @@ public struct BigFloat
         return false;
     }
 
+    private static int PullLowerExponent(int activeExpo)
+    {
+        int[] expos = expoChars.Keys.Where(x => x < activeExpo).ToArray();
+        if (expos.Length == 0)
+        {
+            return 0;
+        }
+        return expoChars.Keys.Where(x => x < activeExpo).ToArray().Last();
+    }
     private static BigFloat ReBuild(float baseNumber, int exponent, int targetExponent)
     {
         //t=3 e=5 d=2 | t=0 e=1 d=1

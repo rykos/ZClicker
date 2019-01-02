@@ -6,7 +6,7 @@ using System.IO;
 
 public class DebugFunctions : MonoBehaviour
 {
-    [MenuItem("Tools/Flush Save")]
+    //[MenuItem("Tools/Flush Save")]
     private static void FlushSave()
     {
         string mapPath = Path.Combine(Application.persistentDataPath, "Map.bin");

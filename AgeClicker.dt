@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-16"?>
-<DevTrackerData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" SolutionTotalEditTime="PT3H21M32.6337157S" SolutionTotalViewTime="PT11H2M5.3192625S" SolutionTotalDebugTime="PT2M42.1380917S">
+<DevTrackerData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" SolutionTotalEditTime="PT3H45M57.7717508S" SolutionTotalViewTime="PT12H16M36.3929244S" SolutionTotalDebugTime="PT2M42.1380917S">
   <FileVersion>
     <Major>1</Major>
     <Minor>0</Minor>
@@ -7,87 +7,44 @@
   <SolutionFolder>C:\Users\rykos\AgeClicker</SolutionFolder>
   <SessionTimeList />
   <LastSessionTimeList>
-    <DevTrackerDataItem ViewActiveTime="PT29M22.7622511S" EditActiveTime="PT4M5.9212505S">
-      <ModifiedDate>2018-12-29T19:08:40.4284756+01:00</ModifiedDate>
-      <ModifiedBy>rykos</ModifiedBy>
-      <EditedCount>1</EditedCount>
-      <ViewedCount>1</ViewedCount>
-      <Item>C:\Users\rykos\AgeClicker\Assets\Scripts\BuildingManager.cs</Item>
-      <ItemType>ProjectItem</ItemType>
-      <ProjectName>C:\Users\rykos\AgeClicker\Assembly-CSharp.csproj</ProjectName>
-      <CreatedDate>2018-12-29T15:07:32.9904046+01:00</CreatedDate>
-      <ViewedBy>rykos</ViewedBy>
-    </DevTrackerDataItem>
-    <DevTrackerDataItem ViewActiveTime="PT6M22.8922018S" EditActiveTime="PT0S">
+    <DevTrackerDataItem ViewActiveTime="PT1.4105285S" EditActiveTime="PT0S">
       <ModifiedDate>0001-01-01T00:00:00</ModifiedDate>
       <EditedCount>0</EditedCount>
       <ViewedCount>1</ViewedCount>
-      <Item>C:\Users\rykos\AgeClicker\Assets\Scripts\MapManager.cs</Item>
+      <Item>C:\Users\rykos\AgeClicker\Assets\Scripts\BuildingScripts\DebugFunctions.cs</Item>
       <ItemType>ProjectItem</ItemType>
       <ProjectName>C:\Users\rykos\AgeClicker\Assembly-CSharp.csproj</ProjectName>
-      <CreatedDate>2018-12-29T15:07:27.2000788+01:00</CreatedDate>
+      <CreatedDate>2019-01-02T00:02:47.2325568+01:00</CreatedDate>
       <ViewedBy>rykos</ViewedBy>
     </DevTrackerDataItem>
-    <DevTrackerDataItem ViewActiveTime="PT29.724388S" EditActiveTime="PT11.8683172S">
-      <ModifiedDate>2018-12-29T20:05:37.0066348+01:00</ModifiedDate>
-      <ModifiedBy>rykos</ModifiedBy>
-      <EditedCount>1</EditedCount>
-      <ViewedCount>1</ViewedCount>
-      <Item>C:\Users\rykos\AgeClicker\Assets\Scripts\Player.cs</Item>
-      <ItemType>ProjectItem</ItemType>
-      <ProjectName>C:\Users\rykos\AgeClicker\Assembly-CSharp.csproj</ProjectName>
-      <CreatedDate>2018-12-29T19:06:36.3991778+01:00</CreatedDate>
-      <ViewedBy>rykos</ViewedBy>
-    </DevTrackerDataItem>
-    <DevTrackerDataItem ViewActiveTime="PT7.2967396S" EditActiveTime="PT0S">
+    <DevTrackerDataItem ViewActiveTime="PT1.2627881S" EditActiveTime="PT0S">
       <ModifiedDate>0001-01-01T00:00:00</ModifiedDate>
       <EditedCount>0</EditedCount>
-      <ViewedCount>1</ViewedCount>
-      <Item>C:\Users\rykos\AgeClicker\Assets\Scripts\PlayerControl.cs</Item>
-      <ItemType>ProjectItem</ItemType>
-      <ProjectName>C:\Users\rykos\AgeClicker\Assembly-CSharp.csproj</ProjectName>
-      <CreatedDate>2018-12-29T19:06:38.789195+01:00</CreatedDate>
-      <ViewedBy>rykos</ViewedBy>
-    </DevTrackerDataItem>
-    <DevTrackerDataItem ViewActiveTime="PT7.2132365S" EditActiveTime="PT0S">
-      <ModifiedDate>0001-01-01T00:00:00</ModifiedDate>
-      <EditedCount>0</EditedCount>
-      <ViewedCount>1</ViewedCount>
-      <Item>Single.cs</Item>
-      <ItemType>ProjectItem</ItemType>
-      <ProjectName />
-      <CreatedDate>2018-12-29T19:06:27.124653+01:00</CreatedDate>
-      <ViewedBy>rykos</ViewedBy>
-    </DevTrackerDataItem>
-    <DevTrackerDataItem ViewActiveTime="PT11M44.8028694S" EditActiveTime="PT6M58.7645929S">
-      <ModifiedDate>2018-12-29T20:01:35.2368327+01:00</ModifiedDate>
-      <ModifiedBy>rykos</ModifiedBy>
-      <EditedCount>1</EditedCount>
       <ViewedCount>1</ViewedCount>
       <Item>C:\Users\rykos\AgeClicker\Assets\Scripts\UIController.cs</Item>
       <ItemType>ProjectItem</ItemType>
       <ProjectName>C:\Users\rykos\AgeClicker\Assembly-CSharp.csproj</ProjectName>
-      <CreatedDate>2018-12-29T19:06:39.3927335+01:00</CreatedDate>
-      <ViewedBy>rykos</ViewedBy>
-    </DevTrackerDataItem>
-    <DevTrackerDataItem ViewActiveTime="PT13M4.0814884S" EditActiveTime="PT3M46.4486876S">
-      <ModifiedDate>2018-12-29T20:04:26.3282872+01:00</ModifiedDate>
-      <ModifiedBy>rykos</ModifiedBy>
-      <EditedCount>1</EditedCount>
-      <ViewedCount>1</ViewedCount>
-      <Item>C:\Users\rykos\AgeClicker\Assets\Scripts\BuildingScripts\UpgradeController.cs</Item>
-      <ItemType>ProjectItem</ItemType>
-      <ProjectName>C:\Users\rykos\AgeClicker\Assembly-CSharp.csproj</ProjectName>
-      <CreatedDate>2018-12-29T15:07:29.7273147+01:00</CreatedDate>
+      <CreatedDate>2019-01-02T00:02:48.6440854+01:00</CreatedDate>
       <ViewedBy>rykos</ViewedBy>
     </DevTrackerDataItem>
   </LastSessionTimeList>
   <TotalTimeList>
-    <DevTrackerDataItem ViewActiveTime="PT3H50M34.3367261S" EditActiveTime="PT51M9.1409042S">
-      <ModifiedDate>2018-12-29T19:08:40.4284756+01:00</ModifiedDate>
+    <DevTrackerDataItem ViewActiveTime="PT13M53.0631154S" EditActiveTime="PT9M24.6070995S">
+      <ModifiedDate>2019-01-01T18:47:59.14086+01:00</ModifiedDate>
       <ModifiedBy>rykos</ModifiedBy>
-      <EditedCount>14</EditedCount>
-      <ViewedCount>16</ViewedCount>
+      <EditedCount>3</EditedCount>
+      <ViewedCount>3</ViewedCount>
+      <Item>C:\Users\rykos\AgeClicker\Assets\Scripts\Boss\BossManager.cs</Item>
+      <ItemType>ProjectItem</ItemType>
+      <ProjectName>C:\Users\rykos\AgeClicker\Assembly-CSharp.csproj</ProjectName>
+      <CreatedDate>2018-12-30T19:35:58.2424058+01:00</CreatedDate>
+      <ViewedBy>rykos</ViewedBy>
+    </DevTrackerDataItem>
+    <DevTrackerDataItem ViewActiveTime="PT4H1M12.3193368S" EditActiveTime="PT51M13.8266304S">
+      <ModifiedDate>2019-01-01T18:51:54.0492721+01:00</ModifiedDate>
+      <ModifiedBy>rykos</ModifiedBy>
+      <EditedCount>16</EditedCount>
+      <ViewedCount>20</ViewedCount>
       <Item>C:\Users\rykos\AgeClicker\Assets\Scripts\BuildingManager.cs</Item>
       <ItemType>ProjectItem</ItemType>
       <ProjectName>C:\Users\rykos\AgeClicker\Assembly-CSharp.csproj</ProjectName>
@@ -125,11 +82,11 @@
       <CreatedDate>2018-12-07T17:22:31.2252386+01:00</CreatedDate>
       <ViewedBy>rykos</ViewedBy>
     </DevTrackerDataItem>
-    <DevTrackerDataItem ViewActiveTime="PT3M7.3691938S" EditActiveTime="PT1M15.6126703S">
-      <ModifiedDate>2018-12-23T19:34:07.8128749+01:00</ModifiedDate>
+    <DevTrackerDataItem ViewActiveTime="PT8M28.2642491S" EditActiveTime="PT1M15.9586527S">
+      <ModifiedDate>2019-01-01T23:37:05.2321424+01:00</ModifiedDate>
       <ModifiedBy>rykos</ModifiedBy>
-      <EditedCount>3</EditedCount>
-      <ViewedCount>5</ViewedCount>
+      <EditedCount>4</EditedCount>
+      <ViewedCount>8</ViewedCount>
       <Item>C:\Users\rykos\AgeClicker\Assets\Scripts\BuildingScripts\DebugFunctions.cs</Item>
       <ItemType>ProjectItem</ItemType>
       <ProjectName>C:\Users\rykos\AgeClicker\Assembly-CSharp.csproj</ProjectName>
@@ -157,44 +114,44 @@
       <CreatedDate>2018-12-13T19:13:07.1580251+01:00</CreatedDate>
       <ViewedBy>rykos</ViewedBy>
     </DevTrackerDataItem>
-    <DevTrackerDataItem ViewActiveTime="PT1H10M51.5405986S" EditActiveTime="PT25M26.2692663S">
+    <DevTrackerDataItem ViewActiveTime="PT1H11M8.3020833S" EditActiveTime="PT25M26.2692663S">
       <ModifiedDate>2018-12-23T17:37:26.7587079+01:00</ModifiedDate>
       <ModifiedBy>rykos</ModifiedBy>
       <EditedCount>6</EditedCount>
-      <ViewedCount>13</ViewedCount>
+      <ViewedCount>15</ViewedCount>
       <Item>C:\Users\rykos\AgeClicker\Assets\Scripts\MapManager.cs</Item>
       <ItemType>ProjectItem</ItemType>
       <ProjectName>C:\Users\rykos\AgeClicker\Assembly-CSharp.csproj</ProjectName>
       <CreatedDate>2018-12-07T15:47:28.6527022+01:00</CreatedDate>
       <ViewedBy>rykos</ViewedBy>
     </DevTrackerDataItem>
-    <DevTrackerDataItem ViewActiveTime="PT6M48.169577S" EditActiveTime="PT3M44.5823776S">
+    <DevTrackerDataItem ViewActiveTime="PT6M48.4557484S" EditActiveTime="PT3M44.5823776S">
       <ModifiedDate>2018-12-29T20:05:37.0066348+01:00</ModifiedDate>
       <ModifiedBy>rykos</ModifiedBy>
       <EditedCount>3</EditedCount>
-      <ViewedCount>8</ViewedCount>
+      <ViewedCount>9</ViewedCount>
       <Item>C:\Users\rykos\AgeClicker\Assets\Scripts\Player.cs</Item>
       <ItemType>ProjectItem</ItemType>
       <ProjectName>C:\Users\rykos\AgeClicker\Assembly-CSharp.csproj</ProjectName>
       <CreatedDate>2018-12-09T21:09:50.3072282+01:00</CreatedDate>
       <ViewedBy>rykos</ViewedBy>
     </DevTrackerDataItem>
-    <DevTrackerDataItem ViewActiveTime="PT2H25M31.3653756S" EditActiveTime="PT47M25.682447S">
-      <ModifiedDate>2018-12-23T17:34:43.5690333+01:00</ModifiedDate>
+    <DevTrackerDataItem ViewActiveTime="PT2H42M57.669592S" EditActiveTime="PT53M48.7525647S">
+      <ModifiedDate>2019-01-01T18:43:03.6085763+01:00</ModifiedDate>
       <ModifiedBy>rykos</ModifiedBy>
-      <EditedCount>8</EditedCount>
-      <ViewedCount>14</ViewedCount>
+      <EditedCount>10</EditedCount>
+      <ViewedCount>16</ViewedCount>
       <Item>C:\Users\rykos\AgeClicker\Assets\Scripts\PlayerControl.cs</Item>
       <ItemType>ProjectItem</ItemType>
       <ProjectName>C:\Users\rykos\AgeClicker\Assembly-CSharp.csproj</ProjectName>
       <CreatedDate>2018-12-07T15:12:19.3533572+01:00</CreatedDate>
       <ViewedBy>rykos</ViewedBy>
     </DevTrackerDataItem>
-    <DevTrackerDataItem ViewActiveTime="PT5M46.8204793S" EditActiveTime="PT3M3.0701605S">
-      <ModifiedDate>2018-12-13T23:30:10.0170622+01:00</ModifiedDate>
+    <DevTrackerDataItem ViewActiveTime="PT9M26.3768928S" EditActiveTime="PT3M14.0425213S">
+      <ModifiedDate>2018-12-31T16:36:08.5355265+01:00</ModifiedDate>
       <ModifiedBy>rykos</ModifiedBy>
-      <EditedCount>3</EditedCount>
-      <ViewedCount>8</ViewedCount>
+      <EditedCount>4</EditedCount>
+      <ViewedCount>10</ViewedCount>
       <Item>C:\Users\rykos\AgeClicker\Assets\Scripts\SaveManagment.cs</Item>
       <ItemType>ProjectItem</ItemType>
       <ProjectName>C:\Users\rykos\AgeClicker\Assembly-CSharp.csproj</ProjectName>
@@ -211,33 +168,33 @@
       <CreatedDate>2018-12-14T16:15:12.3174659+01:00</CreatedDate>
       <ViewedBy>rykos</ViewedBy>
     </DevTrackerDataItem>
-    <DevTrackerDataItem ViewActiveTime="PT2M22.2711679S" EditActiveTime="PT3M24.9219307S">
-      <ModifiedDate>2018-12-23T17:30:07.7710323+01:00</ModifiedDate>
+    <DevTrackerDataItem ViewActiveTime="PT6M5.6257551S" EditActiveTime="PT5M54.2500947S">
+      <ModifiedDate>2019-01-01T23:05:28.8335899+01:00</ModifiedDate>
       <ModifiedBy>rykos</ModifiedBy>
-      <EditedCount>1</EditedCount>
-      <ViewedCount>2</ViewedCount>
+      <EditedCount>2</EditedCount>
+      <ViewedCount>3</ViewedCount>
       <Item>C:\Users\rykos\AgeClicker\Assets\Scripts\UIScripts\TapValue.cs</Item>
       <ItemType>ProjectItem</ItemType>
       <ProjectName>C:\Users\rykos\AgeClicker\Assembly-CSharp.csproj</ProjectName>
       <CreatedDate>2018-12-23T17:19:36.3866915+01:00</CreatedDate>
       <ViewedBy>rykos</ViewedBy>
     </DevTrackerDataItem>
-    <DevTrackerDataItem ViewActiveTime="PT39M20.0066461S" EditActiveTime="PT15M35.5489164S">
-      <ModifiedDate>2018-12-29T20:01:35.2368327+01:00</ModifiedDate>
+    <DevTrackerDataItem ViewActiveTime="PT52M46.4398884S" EditActiveTime="PT20M18.8935503S">
+      <ModifiedDate>2019-01-01T23:27:53.9200273+01:00</ModifiedDate>
       <ModifiedBy>rykos</ModifiedBy>
-      <EditedCount>7</EditedCount>
-      <ViewedCount>12</ViewedCount>
+      <EditedCount>8</EditedCount>
+      <ViewedCount>17</ViewedCount>
       <Item>C:\Users\rykos\AgeClicker\Assets\Scripts\UIController.cs</Item>
       <ItemType>ProjectItem</ItemType>
       <ProjectName>C:\Users\rykos\AgeClicker\Assembly-CSharp.csproj</ProjectName>
       <CreatedDate>2018-12-09T21:29:34.1212156+01:00</CreatedDate>
       <ViewedBy>rykos</ViewedBy>
     </DevTrackerDataItem>
-    <DevTrackerDataItem ViewActiveTime="PT2H19M59.5205928S" EditActiveTime="PT43M40.3437433S">
-      <ModifiedDate>2018-12-29T20:04:26.3282872+01:00</ModifiedDate>
+    <DevTrackerDataItem ViewActiveTime="PT2H26M5.9433566S" EditActiveTime="PT44M49.1447047S">
+      <ModifiedDate>2019-01-01T17:53:16.5453833+01:00</ModifiedDate>
       <ModifiedBy>rykos</ModifiedBy>
-      <EditedCount>9</EditedCount>
-      <ViewedCount>10</ViewedCount>
+      <EditedCount>12</EditedCount>
+      <ViewedCount>13</ViewedCount>
       <Item>C:\Users\rykos\AgeClicker\Assets\Scripts\BuildingScripts\UpgradeController.cs</Item>
       <ItemType>ProjectItem</ItemType>
       <ProjectName>C:\Users\rykos\AgeClicker\Assembly-CSharp.csproj</ProjectName>
@@ -246,6 +203,280 @@
     </DevTrackerDataItem>
   </TotalTimeList>
   <HistoryTimeList>
+    <DevTrackerDataItem ViewActiveTime="PT1.2627881S" EditActiveTime="PT0S">
+      <ModifiedDate>0001-01-01T00:00:00</ModifiedDate>
+      <EditedCount>0</EditedCount>
+      <ViewedCount>1</ViewedCount>
+      <Item>C:\Users\rykos\AgeClicker\Assets\Scripts\UIController.cs</Item>
+      <ItemType>ProjectItem</ItemType>
+      <ProjectName>C:\Users\rykos\AgeClicker\Assembly-CSharp.csproj</ProjectName>
+      <CreatedDate>2019-01-02T00:02:48.6440854+01:00</CreatedDate>
+      <ViewedBy>rykos</ViewedBy>
+    </DevTrackerDataItem>
+    <DevTrackerDataItem ViewActiveTime="PT1.4105285S" EditActiveTime="PT0S">
+      <ModifiedDate>0001-01-01T00:00:00</ModifiedDate>
+      <EditedCount>0</EditedCount>
+      <ViewedCount>1</ViewedCount>
+      <Item>C:\Users\rykos\AgeClicker\Assets\Scripts\BuildingScripts\DebugFunctions.cs</Item>
+      <ItemType>ProjectItem</ItemType>
+      <ProjectName>C:\Users\rykos\AgeClicker\Assembly-CSharp.csproj</ProjectName>
+      <CreatedDate>2019-01-02T00:02:47.2325568+01:00</CreatedDate>
+      <ViewedBy>rykos</ViewedBy>
+    </DevTrackerDataItem>
+    <DevTrackerDataItem ViewActiveTime="PT1.3855679S" EditActiveTime="PT0S">
+      <ModifiedDate>0001-01-01T00:00:00</ModifiedDate>
+      <EditedCount>0</EditedCount>
+      <ViewedCount>1</ViewedCount>
+      <Item>C:\Users\rykos\AgeClicker\Assets\Scripts\BuildingScripts\DebugFunctions.cs</Item>
+      <ItemType>ProjectItem</ItemType>
+      <ProjectName>C:\Users\rykos\AgeClicker\Assembly-CSharp.csproj</ProjectName>
+      <CreatedDate>2019-01-02T00:02:45.2251701+01:00</CreatedDate>
+      <ViewedBy>rykos</ViewedBy>
+    </DevTrackerDataItem>
+    <DevTrackerDataItem ViewActiveTime="PT5M18.1019579S" EditActiveTime="PT0.3459824S">
+      <ModifiedDate>2019-01-01T23:37:05.2321424+01:00</ModifiedDate>
+      <ModifiedBy>rykos</ModifiedBy>
+      <EditedCount>1</EditedCount>
+      <ViewedCount>1</ViewedCount>
+      <Item>C:\Users\rykos\AgeClicker\Assets\Scripts\BuildingScripts\DebugFunctions.cs</Item>
+      <ItemType>ProjectItem</ItemType>
+      <ProjectName>C:\Users\rykos\AgeClicker\Assembly-CSharp.csproj</ProjectName>
+      <CreatedDate>2019-01-01T23:37:01.5951823+01:00</CreatedDate>
+      <ViewedBy>rykos</ViewedBy>
+    </DevTrackerDataItem>
+    <DevTrackerDataItem ViewActiveTime="PT3M43.3545872S" EditActiveTime="PT2M29.328164S">
+      <ModifiedDate>2019-01-01T23:05:28.8335899+01:00</ModifiedDate>
+      <ModifiedBy>rykos</ModifiedBy>
+      <EditedCount>1</EditedCount>
+      <ViewedCount>1</ViewedCount>
+      <Item>C:\Users\rykos\AgeClicker\Assets\Scripts\UIScripts\TapValue.cs</Item>
+      <ItemType>ProjectItem</ItemType>
+      <ProjectName>C:\Users\rykos\AgeClicker\Assembly-CSharp.csproj</ProjectName>
+      <CreatedDate>2019-01-01T22:34:23.3968336+01:00</CreatedDate>
+      <ViewedBy>rykos</ViewedBy>
+    </DevTrackerDataItem>
+    <DevTrackerDataItem ViewActiveTime="PT29.7234952S" EditActiveTime="PT1.5376227S">
+      <ModifiedDate>2019-01-01T18:43:03.6085763+01:00</ModifiedDate>
+      <ModifiedBy>rykos</ModifiedBy>
+      <EditedCount>1</EditedCount>
+      <ViewedCount>1</ViewedCount>
+      <Item>C:\Users\rykos\AgeClicker\Assets\Scripts\PlayerControl.cs</Item>
+      <ItemType>ProjectItem</ItemType>
+      <ProjectName>C:\Users\rykos\AgeClicker\Assembly-CSharp.csproj</ProjectName>
+      <CreatedDate>2019-01-01T18:39:44.9974549+01:00</CreatedDate>
+      <ViewedBy>rykos</ViewedBy>
+    </DevTrackerDataItem>
+    <DevTrackerDataItem ViewActiveTime="PT56.5336793S" EditActiveTime="PT1.440016S">
+      <ModifiedDate>2019-01-01T18:51:54.0492721+01:00</ModifiedDate>
+      <ModifiedBy>rykos</ModifiedBy>
+      <EditedCount>1</EditedCount>
+      <ViewedCount>1</ViewedCount>
+      <Item>C:\Users\rykos\AgeClicker\Assets\Scripts\BuildingManager.cs</Item>
+      <ItemType>ProjectItem</ItemType>
+      <ProjectName>C:\Users\rykos\AgeClicker\Assembly-CSharp.csproj</ProjectName>
+      <CreatedDate>2019-01-01T18:39:38.8861646+01:00</CreatedDate>
+      <ViewedBy>rykos</ViewedBy>
+    </DevTrackerDataItem>
+    <DevTrackerDataItem ViewActiveTime="PT11M6.0597304S" EditActiveTime="PT4M43.3446339S">
+      <ModifiedDate>2019-01-01T23:27:53.9200273+01:00</ModifiedDate>
+      <ModifiedBy>rykos</ModifiedBy>
+      <EditedCount>1</EditedCount>
+      <ViewedCount>1</ViewedCount>
+      <Item>C:\Users\rykos\AgeClicker\Assets\Scripts\UIController.cs</Item>
+      <ItemType>ProjectItem</ItemType>
+      <ProjectName>C:\Users\rykos\AgeClicker\Assembly-CSharp.csproj</ProjectName>
+      <CreatedDate>2019-01-01T18:03:05.6749656+01:00</CreatedDate>
+      <ViewedBy>rykos</ViewedBy>
+    </DevTrackerDataItem>
+    <DevTrackerDataItem ViewActiveTime="PT44.7778609S" EditActiveTime="PT0.9254574S">
+      <ModifiedDate>2019-01-01T17:53:16.5453833+01:00</ModifiedDate>
+      <ModifiedBy>rykos</ModifiedBy>
+      <EditedCount>1</EditedCount>
+      <ViewedCount>1</ViewedCount>
+      <Item>C:\Users\rykos\AgeClicker\Assets\Scripts\BuildingScripts\UpgradeController.cs</Item>
+      <ItemType>ProjectItem</ItemType>
+      <ProjectName>C:\Users\rykos\AgeClicker\Assembly-CSharp.csproj</ProjectName>
+      <CreatedDate>2019-01-01T17:17:28.7339133+01:00</CreatedDate>
+      <ViewedBy>rykos</ViewedBy>
+    </DevTrackerDataItem>
+    <DevTrackerDataItem ViewActiveTime="PT7M45.9433676S" EditActiveTime="PT4M30.5658229S">
+      <ModifiedDate>2019-01-01T18:47:59.14086+01:00</ModifiedDate>
+      <ModifiedBy>rykos</ModifiedBy>
+      <EditedCount>1</EditedCount>
+      <ViewedCount>1</ViewedCount>
+      <Item>C:\Users\rykos\AgeClicker\Assets\Scripts\Boss\BossManager.cs</Item>
+      <ItemType>ProjectItem</ItemType>
+      <ProjectName>C:\Users\rykos\AgeClicker\Assembly-CSharp.csproj</ProjectName>
+      <CreatedDate>2019-01-01T17:09:38.645149+01:00</CreatedDate>
+      <ViewedBy>rykos</ViewedBy>
+    </DevTrackerDataItem>
+    <DevTrackerDataItem ViewActiveTime="PT38.5504242S" EditActiveTime="PT0S">
+      <ModifiedDate>0001-01-01T00:00:00</ModifiedDate>
+      <EditedCount>0</EditedCount>
+      <ViewedCount>1</ViewedCount>
+      <Item>C:\Users\rykos\AgeClicker\Assets\Scripts\SaveManagment.cs</Item>
+      <ItemType>ProjectItem</ItemType>
+      <ProjectName>C:\Users\rykos\AgeClicker\Assembly-CSharp.csproj</ProjectName>
+      <CreatedDate>2019-01-01T17:09:35.7770689+01:00</CreatedDate>
+      <ViewedBy>rykos</ViewedBy>
+    </DevTrackerDataItem>
+    <DevTrackerDataItem ViewActiveTime="PT1.1354489S" EditActiveTime="PT0S">
+      <ModifiedDate>0001-01-01T00:00:00</ModifiedDate>
+      <EditedCount>0</EditedCount>
+      <ViewedCount>1</ViewedCount>
+      <Item>C:\Users\rykos\AgeClicker\Assets\Scripts\UIController.cs</Item>
+      <ItemType>ProjectItem</ItemType>
+      <ProjectName>C:\Users\rykos\AgeClicker\Assembly-CSharp.csproj</ProjectName>
+      <CreatedDate>2018-12-31T20:25:48.5969652+01:00</CreatedDate>
+      <ViewedBy>rykos</ViewedBy>
+    </DevTrackerDataItem>
+    <DevTrackerDataItem ViewActiveTime="PT0.2861714S" EditActiveTime="PT0S">
+      <ModifiedDate>0001-01-01T00:00:00</ModifiedDate>
+      <EditedCount>0</EditedCount>
+      <ViewedCount>1</ViewedCount>
+      <Item>C:\Users\rykos\AgeClicker\Assets\Scripts\Player.cs</Item>
+      <ItemType>ProjectItem</ItemType>
+      <ProjectName>C:\Users\rykos\AgeClicker\Assembly-CSharp.csproj</ProjectName>
+      <CreatedDate>2018-12-31T16:33:25.3873205+01:00</CreatedDate>
+      <ViewedBy>rykos</ViewedBy>
+    </DevTrackerDataItem>
+    <DevTrackerDataItem ViewActiveTime="PT15.1240106S" EditActiveTime="PT0S">
+      <ModifiedDate>0001-01-01T00:00:00</ModifiedDate>
+      <EditedCount>0</EditedCount>
+      <ViewedCount>1</ViewedCount>
+      <Item>C:\Users\rykos\AgeClicker\Assets\Scripts\MapManager.cs</Item>
+      <ItemType>ProjectItem</ItemType>
+      <ProjectName>C:\Users\rykos\AgeClicker\Assembly-CSharp.csproj</ProjectName>
+      <CreatedDate>2018-12-31T16:33:24.3539321+01:00</CreatedDate>
+      <ViewedBy>rykos</ViewedBy>
+    </DevTrackerDataItem>
+    <DevTrackerDataItem ViewActiveTime="PT3M1.0069735S" EditActiveTime="PT10.9723608S">
+      <ModifiedDate>2018-12-31T16:36:08.5355265+01:00</ModifiedDate>
+      <ModifiedBy>rykos</ModifiedBy>
+      <EditedCount>1</EditedCount>
+      <ViewedCount>1</ViewedCount>
+      <Item>C:\Users\rykos\AgeClicker\Assets\Scripts\SaveManagment.cs</Item>
+      <ItemType>ProjectItem</ItemType>
+      <ProjectName>C:\Users\rykos\AgeClicker\Assembly-CSharp.csproj</ProjectName>
+      <CreatedDate>2018-12-31T16:26:08.8752351+01:00</CreatedDate>
+      <ViewedBy>rykos</ViewedBy>
+    </DevTrackerDataItem>
+    <DevTrackerDataItem ViewActiveTime="PT16M56.5807212S" EditActiveTime="PT6M21.532495S">
+      <ModifiedDate>2018-12-31T20:26:47.2339008+01:00</ModifiedDate>
+      <ModifiedBy>rykos</ModifiedBy>
+      <EditedCount>1</EditedCount>
+      <ViewedCount>1</ViewedCount>
+      <Item>C:\Users\rykos\AgeClicker\Assets\Scripts\PlayerControl.cs</Item>
+      <ItemType>ProjectItem</ItemType>
+      <ProjectName>C:\Users\rykos\AgeClicker\Assembly-CSharp.csproj</ProjectName>
+      <CreatedDate>2018-12-31T16:24:15.3677405+01:00</CreatedDate>
+      <ViewedBy>rykos</ViewedBy>
+    </DevTrackerDataItem>
+    <DevTrackerDataItem ViewActiveTime="PT3M3.937854S" EditActiveTime="PT1M45.8233757S">
+      <ModifiedDate>2018-12-31T20:28:12.3918436+01:00</ModifiedDate>
+      <ModifiedBy>rykos</ModifiedBy>
+      <EditedCount>1</EditedCount>
+      <ViewedCount>1</ViewedCount>
+      <Item>C:\Users\rykos\AgeClicker\Assets\Scripts\Boss\BossManager.cs</Item>
+      <ItemType>ProjectItem</ItemType>
+      <ProjectName>C:\Users\rykos\AgeClicker\Assembly-CSharp.csproj</ProjectName>
+      <CreatedDate>2018-12-31T16:20:40.5069179+01:00</CreatedDate>
+      <ViewedBy>rykos</ViewedBy>
+    </DevTrackerDataItem>
+    <DevTrackerDataItem ViewActiveTime="PT2M1.6192513S" EditActiveTime="PT0S">
+      <ModifiedDate>0001-01-01T00:00:00</ModifiedDate>
+      <EditedCount>0</EditedCount>
+      <ViewedCount>1</ViewedCount>
+      <Item>C:\Users\rykos\AgeClicker\Assets\Scripts\BuildingManager.cs</Item>
+      <ItemType>ProjectItem</ItemType>
+      <ProjectName>C:\Users\rykos\AgeClicker\Assembly-CSharp.csproj</ProjectName>
+      <CreatedDate>2018-12-31T16:19:38.9962548+01:00</CreatedDate>
+      <ViewedBy>rykos</ViewedBy>
+    </DevTrackerDataItem>
+    <DevTrackerDataItem ViewActiveTime="PT2M11.7490317S" EditActiveTime="PT0S">
+      <ModifiedDate>0001-01-01T00:00:00</ModifiedDate>
+      <EditedCount>0</EditedCount>
+      <ViewedCount>1</ViewedCount>
+      <Item>C:\Users\rykos\AgeClicker\Assets\Scripts\UIController.cs</Item>
+      <ItemType>ProjectItem</ItemType>
+      <ProjectName>C:\Users\rykos\AgeClicker\Assembly-CSharp.csproj</ProjectName>
+      <CreatedDate>2018-12-30T19:46:56.3306739+01:00</CreatedDate>
+      <ViewedBy>rykos</ViewedBy>
+    </DevTrackerDataItem>
+    <DevTrackerDataItem ViewActiveTime="PT3M3.1818938S" EditActiveTime="PT3M8.2179009S">
+      <ModifiedDate>2018-12-30T23:52:25.460589+01:00</ModifiedDate>
+      <ModifiedBy>rykos</ModifiedBy>
+      <EditedCount>1</EditedCount>
+      <ViewedCount>1</ViewedCount>
+      <Item>C:\Users\rykos\AgeClicker\Assets\Scripts\Boss\BossManager.cs</Item>
+      <ItemType>ProjectItem</ItemType>
+      <ProjectName>C:\Users\rykos\AgeClicker\Assembly-CSharp.csproj</ProjectName>
+      <CreatedDate>2018-12-30T19:35:58.2424058+01:00</CreatedDate>
+      <ViewedBy>rykos</ViewedBy>
+    </DevTrackerDataItem>
+    <DevTrackerDataItem ViewActiveTime="PT59.6730029S" EditActiveTime="PT1.9016764S">
+      <ModifiedDate>2018-12-30T18:39:41.7816592+01:00</ModifiedDate>
+      <ModifiedBy>rykos</ModifiedBy>
+      <EditedCount>1</EditedCount>
+      <ViewedCount>1</ViewedCount>
+      <Item>C:\Users\rykos\AgeClicker\Assets\Scripts\BuildingScripts\UpgradeController.cs</Item>
+      <ItemType>ProjectItem</ItemType>
+      <ProjectName>C:\Users\rykos\AgeClicker\Assembly-CSharp.csproj</ProjectName>
+      <CreatedDate>2018-12-30T18:38:11.3956817+01:00</CreatedDate>
+      <ViewedBy>rykos</ViewedBy>
+    </DevTrackerDataItem>
+    <DevTrackerDataItem ViewActiveTime="PT7M0.1942257S" EditActiveTime="PT0S">
+      <ModifiedDate>0001-01-01T00:00:00</ModifiedDate>
+      <EditedCount>0</EditedCount>
+      <ViewedCount>1</ViewedCount>
+      <Item>C:\Users\rykos\AgeClicker\Assets\Scripts\BuildingManager.cs</Item>
+      <ItemType>ProjectItem</ItemType>
+      <ProjectName>C:\Users\rykos\AgeClicker\Assembly-CSharp.csproj</ProjectName>
+      <CreatedDate>2018-12-30T18:38:08.4862798+01:00</CreatedDate>
+      <ViewedBy>rykos</ViewedBy>
+    </DevTrackerDataItem>
+    <DevTrackerDataItem ViewActiveTime="PT39.6354544S" EditActiveTime="PT3.2457102S">
+      <ModifiedDate>2018-12-29T23:04:17.4102319+01:00</ModifiedDate>
+      <ModifiedBy>rykos</ModifiedBy>
+      <EditedCount>1</EditedCount>
+      <ViewedCount>1</ViewedCount>
+      <Item>C:\Users\rykos\AgeClicker\Assets\Scripts\BuildingManager.cs</Item>
+      <ItemType>ProjectItem</ItemType>
+      <ProjectName>C:\Users\rykos\AgeClicker\Assembly-CSharp.csproj</ProjectName>
+      <CreatedDate>2018-12-29T22:52:04.4077265+01:00</CreatedDate>
+      <ViewedBy>rykos</ViewedBy>
+    </DevTrackerDataItem>
+    <DevTrackerDataItem ViewActiveTime="PT4M21.9719S" EditActiveTime="PT1M5.9738276S">
+      <ModifiedDate>2018-12-30T01:52:22.7352203+01:00</ModifiedDate>
+      <ModifiedBy>rykos</ModifiedBy>
+      <EditedCount>1</EditedCount>
+      <ViewedCount>1</ViewedCount>
+      <Item>C:\Users\rykos\AgeClicker\Assets\Scripts\BuildingScripts\UpgradeController.cs</Item>
+      <ItemType>ProjectItem</ItemType>
+      <ProjectName>C:\Users\rykos\AgeClicker\Assembly-CSharp.csproj</ProjectName>
+      <CreatedDate>2018-12-29T22:50:59.0541062+01:00</CreatedDate>
+      <ViewedBy>rykos</ViewedBy>
+    </DevTrackerDataItem>
+    <DevTrackerDataItem ViewActiveTime="PT6.2262432S" EditActiveTime="PT0S">
+      <ModifiedDate>0001-01-01T00:00:00</ModifiedDate>
+      <EditedCount>0</EditedCount>
+      <ViewedCount>1</ViewedCount>
+      <Item>C:\Users\rykos\AgeClicker\Assets\Scripts\UIController.cs</Item>
+      <ItemType>ProjectItem</ItemType>
+      <ProjectName>C:\Users\rykos\AgeClicker\Assembly-CSharp.csproj</ProjectName>
+      <CreatedDate>2018-12-29T22:46:48.2411554+01:00</CreatedDate>
+      <ViewedBy>rykos</ViewedBy>
+    </DevTrackerDataItem>
+    <DevTrackerDataItem ViewActiveTime="PT1.6374741S" EditActiveTime="PT0S">
+      <ModifiedDate>0001-01-01T00:00:00</ModifiedDate>
+      <EditedCount>0</EditedCount>
+      <ViewedCount>1</ViewedCount>
+      <Item>C:\Users\rykos\AgeClicker\Assets\Scripts\MapManager.cs</Item>
+      <ItemType>ProjectItem</ItemType>
+      <ProjectName>C:\Users\rykos\AgeClicker\Assembly-CSharp.csproj</ProjectName>
+      <CreatedDate>2018-12-29T22:46:46.6026815+01:00</CreatedDate>
+      <ViewedBy>rykos</ViewedBy>
+    </DevTrackerDataItem>
     <DevTrackerDataItem ViewActiveTime="PT11M44.8028694S" EditActiveTime="PT6M58.7645929S">
       <ModifiedDate>2018-12-29T20:01:35.2368327+01:00</ModifiedDate>
       <ModifiedBy>rykos</ModifiedBy>

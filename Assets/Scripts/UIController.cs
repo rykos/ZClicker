@@ -11,7 +11,11 @@ public class UIController : MonoBehaviour
 {
     #region Editor
     [SerializeField]
+    private GameObject bossUI;
+    [SerializeField]
     private GameObject TapValueTextGO;
+    [SerializeField]
+    private GameObject TapValueTextBossGO;
     public List<GameObject> buildingUIs = new List<GameObject>();
     #endregion
     private static readonly string _Desc = "{0:0.0}{1}";
@@ -59,10 +63,19 @@ public class UIController : MonoBehaviour
 
     public void ShowTapValue(GameObject canvas, Vector2 position, Tap tap)
     {
-        var tapValueText = Instantiate(TapValueTextGO, canvas.transform);
-        tapValueText.transform.localPosition = position;
+        GameObject usedGO = (canvas.CompareTag("BossInterface") ? TapValueTextBossGO : TapValueTextGO);
+        var tapValueText = Instantiate(usedGO, canvas.transform);
+        position = Camera.main.ScreenToWorldPoint(position);
+        tapValueText.transform.position = new Vector3(position.x, position.y, canvas.transform.position.z-1);
+        //tapValueText.transform.position = new Vector3(tapValueText.transform.position.x, tapValueText.transform.position.y, -8);
         var tapstring = tap.amount.GetString();
         tapValueText.GetComponent<TextMeshProUGUI>().text = string.Format(_Desc, tapstring.Value, tapstring.Exponent);
         tapValueText.GetComponent<TextMeshProUGUI>().color = (tap.critical) ? Color.red : Color.white;
+    }
+
+    public void SwitchBossUI()
+    {
+        bossUI.SetActive(!bossUI.activeSelf);
+        gameObject.SetActive(!bossUI.activeSelf);
     }
 }

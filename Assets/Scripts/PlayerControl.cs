@@ -15,7 +15,14 @@ public class PlayerControl : MonoBehaviour
 
     private void Awake()
     {
-        this.mapManager = GameObject.Find("Map").GetComponent<MapManager>();
+        try
+        {
+            this.mapManager = GameObject.Find("Map").GetComponent<MapManager>();
+        }
+        catch
+        {
+            Debug.Log("No mapManager");
+        }
     }
     private void Update()
     {
@@ -67,6 +74,7 @@ public class PlayerControl : MonoBehaviour
     {
         if (IsPointerOverUIObject(newPosition))
         {
+            UIClick(click, newPosition);
             return;
         }
         Vector2 activePosition = Camera.main.ScreenToWorldPoint(newPosition);
@@ -84,9 +92,26 @@ public class PlayerControl : MonoBehaviour
         }
     }
 
+    private void UIClick(Click click, Vector2 newPosition)
+    {
+        PointerEventData ped = new PointerEventData(EventSystem.current);
+        ped.position = newPosition;
+        List<RaycastResult> results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(ped, results);
+        foreach (var obj in results)
+        {
+            if (obj.gameObject.CompareTag("BossInterface"))
+            {
+                BossInterface(newPosition);
+                break;
+            }
+        }
+    }
+
     private void Tap(Vector2 newPosition)
     {
-        Vector2 touchPos = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
+        //Vector2 touchPos = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
+        Vector2 touchPos = Camera.main.ScreenToWorldPoint(newPosition);
         Collider2D colliderTouched = Physics2D.OverlapPoint(touchPos);
         if (colliderTouched != null)
         {
@@ -126,6 +151,24 @@ public class PlayerControl : MonoBehaviour
         }
         return false;
     }
+
+    private Collider2D GetColliderAt(Vector2 position)
+    {
+        Collider2D colliderTouched = Physics2D.OverlapPoint(Camera.main.ScreenToWorldPoint(position));
+        return colliderTouched;
+    }
+
+    #region Interfaces
+    private void BossInterface(Vector2 touchPos)
+    {
+        Debug.Log("BossInterface clicked");
+        Collider2D colliderTouched = GetColliderAt(touchPos);
+        if (colliderTouched)
+        {
+            colliderTouched.transform.parent.GetComponent<BossManager>().HitBoss(touchPos);
+        }
+    }
+    #endregion
 }
 
 struct Click

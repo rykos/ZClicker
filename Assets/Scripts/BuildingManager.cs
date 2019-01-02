@@ -84,7 +84,6 @@ public class Goldmine : Building
         Tap tap = ExecuteTap();
         MapManager.player.AddGold(tap.amount);
         //Show tap value on world UI
-        TappedPosition = Camera.main.ScreenToWorldPoint(TappedPosition) + new Vector3(0, -0.792f, 0);
         GameObject.Find("UI").GetComponent<UIController>().ShowTapValue
             (MapManager.SelectedBuildingGameObject.transform.Find("Building_Canvas").gameObject, TappedPosition, tap);
     }

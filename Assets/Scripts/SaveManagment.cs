@@ -31,8 +31,11 @@ public class SaveManagment : MonoBehaviour
     }
     public void OnApplicationPause(bool pause)
     {
-        SaveMap();
-        SaveResources();
+        if (pause == true)
+        {
+            SaveMap();
+            SaveResources();
+        }
     }
 
     private void SaveMap()

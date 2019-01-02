@@ -17,6 +17,9 @@ public class TapValue : MonoBehaviour
     private void Update()
     {
         text.color -= new Color32(0,0,0,15);
-        transform.position = Vector2.Lerp(transform.position, (Vector2)transform.position + move_destination, death_time);
+        Vector3 offset = new Vector3(0,0,-8);
+        transform.position = Vector3.Lerp(transform.position,
+            transform.position + (Vector3)move_destination,
+            death_time);
     }
 }
