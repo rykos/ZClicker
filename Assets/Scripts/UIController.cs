@@ -45,10 +45,9 @@ public class UIController : MonoBehaviour
     {
         var cost = upgrade.Cost.GetString();
         var val = upgrade.Value.GetString();
-        item.transform.Find("Cost").GetComponent<TextMeshProUGUI>().text = string.Format(_Desc, cost.Value, cost.Exponent);
-        item.transform.Find("Level").GetComponent<TextMeshProUGUI>().text = upgrade.Level.ToString();
-        item.transform.Find("Description").GetComponent<TextMeshProUGUI>().text = 
-            string.Format(description, val.Value, val.Exponent);
+        item.transform.Find("Cost/CostTMP").GetComponent<TextMeshProUGUI>().text = string.Format(_Desc, cost.Value, cost.Exponent);
+        //item.transform.Find("Level").GetComponent<TextMeshProUGUI>().text = upgrade.Level.ToString();
+        item.transform.Find("Description/DescriptionTMP").GetComponent<TextMeshProUGUI>().text = string.Format(description, val.Value, val.Exponent);
     }
     public void UpdateBuildingUpgrade(UpgradeControllerData upgrade, GameObject item)//Null upgrade
     {

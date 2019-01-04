@@ -33,15 +33,7 @@ public class BuildingManager : MonoBehaviour
 
     private void PersonalizeBuilding()
     {
-        GameObject specificUI = GameObject.Find("UI").GetComponent<UIController>().
-            buildingUIs.Find(x => x.gameObject.name == buildingName).gameObject;
-        var specificMenu = Instantiate(specificUI, menu.transform);
-        building.Init();
-        //Load UpgradeMemory to Upgrades
-        //foreach (UpgradeMemory um in this.building.upgradeMemories)
-        //{
-
-        //}
+        SetUI();
     }
 
     public void Interact(Vector2 TappedPosition)
@@ -57,6 +49,15 @@ public class BuildingManager : MonoBehaviour
     private void Update()
     {
         building.TimedValue();
+    }
+
+    private void SetUI()
+    {
+        GameObject specificUI = GameObject.Find("UI").GetComponent<UIController>().
+            buildingUIs.Find(x => x.gameObject.name == "BuildingInterface_" + buildingName).gameObject;
+        var specificMenu = Instantiate(specificUI, menu.transform);
+        specificMenu.GetComponent<Canvas>().worldCamera = Camera.main;
+        building.Init();
     }
 }
 
@@ -84,8 +85,7 @@ public class Goldmine : Building
         Tap tap = ExecuteTap();
         MapManager.player.AddGold(tap.amount);
         //Show tap value on world UI
-        GameObject.Find("UI").GetComponent<UIController>().ShowTapValue
-            (MapManager.SelectedBuildingGameObject.transform.Find("Building_Canvas").gameObject, TappedPosition, tap);
+        GameObject.Find("UI").GetComponent<UIController>().ShowTapValue(MapManager.SelectedBuildingGameObject.transform.Find("Building_Canvas").gameObject, TappedPosition, tap);
     }
 
     //Collect tap upgrade variables

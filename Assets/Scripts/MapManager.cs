@@ -28,9 +28,10 @@ public class MapManager : MonoBehaviour
         foreach (BuildingMemory bm in map.Buildings)
         {
             var newBuilding = Instantiate(buildingPrefab, this.transform);
-            newBuilding.transform.localPosition = new Vector2(bm.PositionX, 0);
+            newBuilding.transform.localPosition = new Vector2(bm.PositionX, -2);
             BuildingManager buildingManager = newBuilding.GetComponent<BuildingManager>();
             LoadIntoBuildingManager(buildingManager, bm);
+            newBuilding.transform.Find("Model").GetComponent<SpriteRenderer>().sprite = UnityEngine.Resources.Load<Sprite>("Buildings/" + bm.Name);
         }
         selectedBuilding = map.Buildings.Find(x => x.Name == "Goldmine");
         FindBuildingGameobject();
@@ -56,12 +57,23 @@ public class MapManager : MonoBehaviour
     {
         foreach (Transform child in transform)
         {
+            if (child.GetComponent<BuildingManager>() == null)
+            {
+                continue;
+            }
             if (child.position.x == selectedBuilding.PositionX)
             {
                 SelectedBuildingGameObject = child.gameObject;
+                Debug.Log("Found real position");
                 break;
             }
         }
+    }
+
+    public void OpenBuildingMenu()
+    {
+        Debug.Log("Opening selected building menu");
+        SelectedBuildingGameObject.GetComponent<BuildingManager>().SwitchMenu();
     }
 }
 
@@ -89,12 +101,24 @@ public class Map
     //Needs refactorization
     private void FirstInit()
     {
-        Buildings.Add(new BuildingMemory("Goldmine", "You can mine gold in here", 1,
-            0, 0, new Goldmine()));
-        Buildings.Add(new BuildingMemory("Blacksmith", "You can upgrade your hero in here", 1,
-            6, 0, new Blacksmith()));
-        Buildings.Add(new BuildingMemory("Alchemist", "Create potions", 1,
-            -6, 0, new Alchemist()));
+        Buildings.Add(new BuildingMemory("Goldmine", 
+            "You can mine gold in here", 
+            1,
+            0,
+            0,
+            new Goldmine()));
+        Buildings.Add(new BuildingMemory("Blacksmith", 
+            "You can upgrade your hero in here", 
+            1,
+            5.92f, 
+            0, 
+            new Blacksmith()));
+        Buildings.Add(new BuildingMemory("Alchemist", 
+            "Create potions", 
+            1,
+            -5.75f, 
+            0,
+            new Alchemist()));
         Buildings.Sort((x, y) => x.PositionX.CompareTo(y.PositionX));
     }
 }
@@ -109,10 +133,10 @@ public struct BuildingMemory
     public string Description;
     public int Level;
     public float TimeLeft;
-    public int PositionX;
+    public float PositionX;
     public object Type;
 
-    public BuildingMemory(string name, string description, int level, int position, float timeLeft, object type)
+    public BuildingMemory(string name, string description, int level, float position, float timeLeft, object type)
     {
         this.Name = name;
         this.Description = description;

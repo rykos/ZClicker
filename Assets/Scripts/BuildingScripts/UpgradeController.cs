@@ -19,6 +19,7 @@ public class UpgradeController : MonoBehaviour
         }
         if (MemoryExists(upgrade))//Already exist, upgrade
         {
+            Debug.Log("Already exist, upgrade");
             Building building = FindParentBuilding().GetComponent<BuildingManager>().Building;
             int index = building.upgradeMemories.IndexOf(building.upgradeMemories.Find(bm => bm.Name == this.upgrade.Name));
             UpgradeMemory um = building.upgradeMemories[index];
@@ -27,6 +28,7 @@ public class UpgradeController : MonoBehaviour
         }
         else//Create new upgrade 
         {
+            Debug.Log("Create new upgrade ");
             UpgradeMemory newUpgradeMemory = new UpgradeMemory
                 (this.upgrade.Name, 0, this.upgrade.Value,
                 this.upgrade.Cost, this.upgrade.upgradeType);
@@ -62,6 +64,7 @@ public class UpgradeController : MonoBehaviour
             }
             else
             {
+                Debug.Log("Not enough gold");
                 return false;
             }
         }
@@ -137,10 +140,13 @@ public class UpgradeController : MonoBehaviour
             .Find(x => x.Name == this.upgrade.Name);
         if (!um.Equals(default(UpgradeMemory)))
         {
+            Debug.Log("Memory found.");
+            Debug.Log(this.upgrade.Description);
             GameObject.Find("UI").GetComponent<UIController>().UpdateBuildingUpgrade(um, this.upgrade.Description, transform.gameObject);
         }
         else
         {
+            Debug.Log("Memory not found.");
             GameObject.Find("UI").GetComponent<UIController>().UpdateBuildingUpgrade(this.upgrade, transform.gameObject);
         }
     }
@@ -403,7 +409,15 @@ public struct BigFloat
     }
     private static char GetShortName(int exponent)
     {
-        return expoChars[expoChars.Keys.Where(x => x <= exponent).Max()];
+        var expos = expoChars.Keys.Where(x => x <= exponent);
+        if (expos.Count() > 0)
+        {
+            return expoChars[expos.Max()];
+        }
+        else
+        {
+            return ' ';
+        }
     }
     public static explicit operator float(BigFloat bigFloat)
     {

@@ -75,6 +75,7 @@ public class PlayerControl : MonoBehaviour
         if (IsPointerOverUIObject(newPosition))
         {
             UIClick(click, newPosition);
+            Debug.Log("UI Clicked");
             return;
         }
         Vector2 activePosition = Camera.main.ScreenToWorldPoint(newPosition);
