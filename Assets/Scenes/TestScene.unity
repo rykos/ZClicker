@@ -147,7 +147,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 54.539978, y: 172.8}
+  m_AnchoredPosition: {x: 54.54004, y: 172.8}
   m_SizeDelta: {x: 172, y: 172}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &4567705
@@ -239,7 +239,7 @@ PrefabInstance:
     - target: {fileID: 1403569963464587451, guid: 53206cb582bf9b642a125561e87624f9,
         type: 3}
       propertyPath: m_Name
-      value: Slider
+      value: BuildingSlider
       objectReference: {fileID: 0}
     - target: {fileID: 1458177313721994375, guid: 53206cb582bf9b642a125561e87624f9,
         type: 3}
@@ -413,7 +413,7 @@ GameObject:
   - component: {fileID: 235545918}
   - component: {fileID: 235545917}
   m_Layer: 0
-  m_Name: Level
+  m_Name: BuildingLevel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -437,7 +437,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -229.70996}
+  m_AnchoredPosition: {x: 0, y: -189.70996}
   m_SizeDelta: {x: 137.40002, y: -1743.88}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &235545917
@@ -477,6 +477,12 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 235545915}
   m_CullTransparentMesh: 0
+--- !u!1 &460451552 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1403569963464587451, guid: 53206cb582bf9b642a125561e87624f9,
+    type: 3}
+  m_PrefabInstance: {fileID: 210011070}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &484868870
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -629,7 +635,7 @@ GameObject:
   - component: {fileID: 494613410}
   - component: {fileID: 494613409}
   m_Layer: 0
-  m_Name: TextMeshPro Text
+  m_Name: LevelTMP
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1020,7 +1026,7 @@ GameObject:
   - component: {fileID: 1045398629}
   - component: {fileID: 1045398628}
   m_Layer: 0
-  m_Name: TextMeshPro Text
+  m_Name: TagLvlTMP
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1860,7 +1866,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -54.539978, y: 172.8}
+  m_AnchoredPosition: {x: -54.54004, y: 172.8}
   m_SizeDelta: {x: 172, y: 172}
   m_Pivot: {x: 1, y: 0}
 --- !u!114 &1784552105
@@ -1965,6 +1971,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Map
       objectReference: {fileID: 0}
+    - target: {fileID: 1925741527857542058, guid: ff1836bc45113a64ead1962b58cb9323,
+        type: 3}
+      propertyPath: BuildingSlider
+      value: 
+      objectReference: {fileID: 460451552}
     - target: {fileID: 1925741527857542059, guid: ff1836bc45113a64ead1962b58cb9323,
         type: 3}
       propertyPath: m_LocalPosition.x

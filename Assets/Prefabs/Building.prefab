@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 61482696483299360}
   m_Layer: 0
   m_Name: Building
-  m_TagString: Untagged
+  m_TagString: Building
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -50,7 +50,9 @@ MonoBehaviour:
   menu: {fileID: 820812298588237111}
   buildingName: 
   buildingDescription: 
-  buildingLevel: 0
+  buildingLevel:
+    baseNumber: 0
+    exponent: 0
 --- !u!61 &61482696483299360
 BoxCollider2D:
   m_ObjectHideFlags: 0

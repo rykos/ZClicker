@@ -189,8 +189,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_MethodName: Upgrade
+      - m_Target: {fileID: 4520131711768499790}
+        m_MethodName: UpgradeBuilding
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -922,8 +922,8 @@ GameObject:
   m_Component:
   - component: {fileID: 3484947628024416594}
   - component: {fileID: 9005768044930485486}
-  - component: {fileID: 4520131711768499790}
   - component: {fileID: 1666504357349964787}
+  - component: {fileID: 4520131711768499790}
   m_Layer: 0
   m_Name: BuildingInterface
   m_TagString: Untagged
@@ -972,18 +972,6 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 1
   m_TargetDisplay: 0
---- !u!114 &4520131711768499790
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4200040532656888181}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b99edc331c10e724eb340294503906f9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1666504357349964787
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1001,6 +989,18 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &4520131711768499790
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4200040532656888181}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b99edc331c10e724eb340294503906f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5315612573800851636
 GameObject:
   m_ObjectHideFlags: 0
@@ -1350,8 +1350,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 2.7999878, y: -901.80005}
-  m_SizeDelta: {x: -871.6, y: -1803.6}
+  m_AnchoredPosition: {x: 2.7999878, y: -875.6}
+  m_SizeDelta: {x: -871.6, y: -1823.9}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2075629650896512959
 CanvasRenderer:

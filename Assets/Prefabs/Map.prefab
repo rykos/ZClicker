@@ -46,23 +46,30 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buildingPrefab: {fileID: 1526104257330828, guid: 43d34c9118135c0478d00f97f8a3c961,
     type: 3}
+  BuildingSlider: {fileID: 0}
   map:
     Buildings:
     - Name: Alchemist
       Description: Create potions
-      Level: 1
-      TimeLeft: 0
+      Level:
+        baseNumber: 0
+        exponent: 0
       PositionX: -10
+      BuildActive: 0
     - Name: Goldmine
       Description: You can mine gold in here
-      Level: 1
-      TimeLeft: 0
+      Level:
+        baseNumber: 0
+        exponent: 0
       PositionX: 0
+      BuildActive: 0
     - Name: Blacksmith
       Description: You can upgrade your hero in here
-      Level: 1
-      TimeLeft: 0
+      Level:
+        baseNumber: 0
+        exponent: 0
       PositionX: 10
+      BuildActive: 0
 --- !u!1 &6310319577105372801
 GameObject:
   m_ObjectHideFlags: 0

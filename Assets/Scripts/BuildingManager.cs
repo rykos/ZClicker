@@ -11,7 +11,7 @@ public class BuildingManager : MonoBehaviour
     public GameObject menu;
     public string buildingName;
     public string buildingDescription;
-    public int buildingLevel;
+    public BigFloat buildingLevel;
     #endregion
     private Building building;
     public Building Building
@@ -53,11 +53,18 @@ public class BuildingManager : MonoBehaviour
 
     private void SetUI()
     {
+        //Loads predefined ui to generic building gameobject
         GameObject specificUI = GameObject.Find("UI").GetComponent<UIController>().
             buildingUIs.Find(x => x.gameObject.name == "BuildingInterface_" + buildingName).gameObject;
         var specificMenu = Instantiate(specificUI, menu.transform);
         specificMenu.GetComponent<Canvas>().worldCamera = Camera.main;
         building.Init();
+    }
+
+    //Sync building with its memory
+    public void Sync(BuildingMemory bm)
+    {
+        this.building.Level = bm.Level;
     }
 }
 
@@ -67,11 +74,22 @@ public abstract class Building
     public List<UpgradeMemory> upgradeMemories;
     public string Name;
     public string Description;
-    public int Level;
-    public abstract void BuildingInteract(Vector2 TappedPosition);//Building tapped
+    public bool UpgradeState;
+    public float TimeToBuild;//Overall Time
+    public float TimeLeft;
+    public BigFloat Level;
+    //public abstract void BuildingInteract(Vector2 TappedPosition);//Building tapped
+    public virtual void BuildingInteract(Vector2 TappedPosition)
+    {
+        if (UpgradeState == true)
+        {
+            TimeLeft -= 1;
+            GameObject.Find("UI").GetComponent<UIController>().ShowTapString(MapManager.SelectedBuildingGameObject.transform.Find("Building_Canvas").gameObject, TappedPosition, "-1s");
+        }
+    }
     public abstract void Init();//Load
     public abstract void OnUpgrade();
-    public abstract void TimedValue();
+    public abstract void TimedValue();//Executed 
 }
 
 [System.Serializable]
@@ -82,10 +100,14 @@ public class Goldmine : Building
     private float critical = 0f;
     public override void BuildingInteract(Vector2 TappedPosition)
     {
-        Tap tap = ExecuteTap();
-        MapManager.player.AddGold(tap.amount);
-        //Show tap value on world UI
-        GameObject.Find("UI").GetComponent<UIController>().ShowTapValue(MapManager.SelectedBuildingGameObject.transform.Find("Building_Canvas").gameObject, TappedPosition, tap);
+        base.BuildingInteract(TappedPosition);
+        if (UpgradeState == false)
+        {
+            Tap tap = ExecuteTap();
+            MapManager.player.AddGold(tap.amount);
+            //Show tap value on world UI
+            GameObject.Find("UI").GetComponent<UIController>().ShowTapValue(MapManager.SelectedBuildingGameObject.transform.Find("Building_Canvas").gameObject, TappedPosition, tap);
+        }
     }
 
     //Collect tap upgrade variables
@@ -177,6 +199,7 @@ public class Alchemist : Building
 {
     public override void BuildingInteract(Vector2 TappedPosition)
     {
+        base.BuildingInteract(TappedPosition);
         Debug.Log("Alchemist tapped");
     }
 
@@ -200,6 +223,7 @@ public class Blacksmith : Building
 {
     public override void BuildingInteract(Vector2 TappedPosition)
     {
+        base.BuildingInteract(TappedPosition);
         Debug.Log("Blacksmith tapped");
     }
 

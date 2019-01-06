@@ -32,6 +32,13 @@ public class BossManager : MonoBehaviour
             TimeTMP.text = string.Format("{0:0.0}s", boss.Time);
             boss.Time -= Time.deltaTime;
         }
+        if (boss.Time < 0)
+        {
+            boss.Time = 0;
+            boss.timerActive = false;
+            boss.Vulnerable = false;
+
+        }
     }
 
     //Leave boss module
@@ -68,6 +75,10 @@ public class BossManager : MonoBehaviour
             {
                 BossDied();
             }
+        }
+        else
+        {
+            uiController.ShowTapString(bossRoom, touchPos, "Blocked");
         }
     }
 
