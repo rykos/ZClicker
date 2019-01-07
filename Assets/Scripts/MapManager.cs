@@ -92,6 +92,10 @@ public class MapManager : MonoBehaviour
         this.map.UpgradeBuilding(bm);//Handles level up
         //this.selectedBuilding = map.Buildings.First(x => x.Name == selectedBuilding.Name);
         nameToBuilding[bm.Name].UpgradeState = false;
+        if (this.selectedBuilding.Name == bm.Name)
+        {
+            this.selectedBuilding = bm;
+        }
         RequestUIUpdate();
     }
 
@@ -201,14 +205,15 @@ public class Map
     //Upgrades building
     public void UpgradeBuilding(BuildingMemory building)
     {
-        int index = this.Buildings.IndexOf(building);
+        int index = this.Buildings.IndexOf(this.Buildings.First(x => x.Name == building.Name));
         BuildingMemory newBuildingMem = this.Buildings[index].LevelUP();
         this.Buildings[index] = newBuildingMem;
     }
 }
 
 /// <summary>
-/// Holds specific information about building
+/// Holds specific information about building.
+/// Should Be used for save&load system only
 /// </summary>
 [System.Serializable]
 public struct BuildingMemory
