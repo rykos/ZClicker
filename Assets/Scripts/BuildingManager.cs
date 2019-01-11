@@ -9,9 +9,6 @@ public class BuildingManager : MonoBehaviour
 {
     #region Building specific predefined
     public GameObject menu;
-    public string buildingName;
-    public string buildingDescription;
-    public BigFloat buildingLevel;
     #endregion
     private Building building;
     public Building Building
@@ -25,9 +22,9 @@ public class BuildingManager : MonoBehaviour
     public void Build<T>(T type)
     {
         building = (Building)(object)type;
-        building.Name = buildingName;
-        building.Description = buildingDescription;
-        building.Level = buildingLevel;
+        //building.Name = buildingName;
+        //building.Description = buildingDescription;
+        //building.Level = buildingLevel;
         PersonalizeBuilding();
     }
 
@@ -55,7 +52,7 @@ public class BuildingManager : MonoBehaviour
     {
         //Loads predefined ui to generic building gameobject
         GameObject specificUI = GameObject.Find("UI").GetComponent<UIController>().
-            buildingUIs.Find(x => x.gameObject.name == "BuildingInterface_" + buildingName).gameObject;
+            buildingUIs.Find(x => x.gameObject.name == "BuildingInterface_" + this.building.Name).gameObject;
         var specificMenu = Instantiate(specificUI, menu.transform);
         specificMenu.GetComponent<Canvas>().worldCamera = Camera.main;
         building.Init();
@@ -71,6 +68,7 @@ public class BuildingManager : MonoBehaviour
 [System.Serializable]
 public abstract class Building
 {
+    public Vector2Serialize Position;
     public List<UpgradeMemory> upgradeMemories;
     public string Name;
     public string Description;
@@ -78,7 +76,6 @@ public abstract class Building
     public float TimeToBuild;//Overall Time
     public float TimeLeft;
     public BigFloat Level;
-    //public abstract void BuildingInteract(Vector2 TappedPosition);//Building tapped
     public virtual void BuildingInteract(Vector2 TappedPosition)
     {
         if (UpgradeState == true)
@@ -90,6 +87,20 @@ public abstract class Building
     public abstract void Init();//Load
     public abstract void OnUpgrade();
     public abstract void TimedValue();//Executed 
+    public virtual void LevelUP(BigFloat amount)
+    {
+        this.Level = this.Level + amount;
+        Debug.Log("<color=red>LEVELUP</color>");
+    }
+
+    protected Building(string name, string desc, Vector2 position)
+    {
+        this.Name = name;
+        this.Description = desc;
+        this.Position = position;
+        this.Level = BigFloat.BuildNumber(1);
+        this.UpgradeState = false;
+    }
 }
 
 [System.Serializable]
@@ -192,6 +203,11 @@ public class Goldmine : Building
             _updateTime = 0;
         }
     }
+
+    public Goldmine(string name, string desc, Vector2 position) : base(name, desc, position)
+    {
+
+    }
 }
 
 [System.Serializable]
@@ -215,6 +231,11 @@ public class Alchemist : Building
     public override void TimedValue()
     {
         //
+    }
+
+    public Alchemist(string name, string desc, Vector2 position) : base(name, desc, position)
+    {
+
     }
 }
 
@@ -240,6 +261,11 @@ public class Blacksmith : Building
     public override void TimedValue()
     {
         //
+    }
+    
+    public Blacksmith(string name, string desc, Vector2 position) : base(name, desc, position)
+    {
+
     }
 }
 
@@ -291,5 +317,26 @@ public struct Tap
     {
         this.amount = amount;
         this.critical = critical;
+    }
+}
+
+[System.Serializable]
+public struct Vector2Serialize
+{
+    public float X;
+    public float Y;
+    public Vector2Serialize(float x, float y)
+    {
+        this.X = x;
+        this.Y = y;
+    }
+
+    public static implicit operator Vector2(Vector2Serialize vec)
+    {
+        return new Vector2(vec.X, vec.Y);
+    }
+    public static implicit operator Vector2Serialize(Vector2 vec)
+    {
+        return new Vector2Serialize(vec.x, vec.y);
     }
 }

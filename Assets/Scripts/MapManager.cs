@@ -18,8 +18,7 @@ public class MapManager : MonoBehaviour
     public static GameObject SelectedBuildingGameObject;
     public Map map;
     //
-    private BuildingMemory selectedBuilding;//building the player is currently looking at
-    private Dictionary<string, Building> nameToBuilding = new Dictionary<string, Building>();
+    private Building selectedBuilding;//building the player is currently looking at
 
     private void Awake()
     {
@@ -28,25 +27,24 @@ public class MapManager : MonoBehaviour
     }
     private void Start()
     {
-        foreach (BuildingMemory bm in map.Buildings)
+        foreach (Building building in map.Buildings)
         {
             var newBuilding = Instantiate(buildingPrefab, this.transform);
-            newBuilding.transform.localPosition = new Vector2(bm.PositionX, -2);
+            newBuilding.transform.localPosition = new Vector2(building.Position.X, -2);
             BuildingManager buildingManager = newBuilding.GetComponent<BuildingManager>();
-            LoadIntoBuildingManager(buildingManager, bm);
-            newBuilding.transform.Find("Model").GetComponent<SpriteRenderer>().sprite = UnityEngine.Resources.Load<Sprite>("Buildings/" + bm.Name);
+            buildingManager.Build(building);
+            newBuilding.transform.Find("Model").GetComponent<SpriteRenderer>().sprite = UnityEngine.Resources.Load<Sprite>("Buildings/" + building.Name);
         }
         selectedBuilding = map.Buildings.Find(x => x.Name == "Goldmine");
         RequestUIUpdate();
         FindBuildingGameobject();
-        PopulateBuildingDic();
     }
     private void Update()
     {
         int len = map.Buildings.Count;
         for (int i = 0; i < len; i++)
         {
-            if (map.Buildings[i].BuildActive)//Buildings with active upgrade
+            if (map.Buildings[i].UpgradeState)//Buildings with active upgrade
             {
                 UpgradeTimeTick(map.Buildings[i]);
                 UpdateBuildingSlider();
@@ -56,60 +54,34 @@ public class MapManager : MonoBehaviour
 
     private void UpdateBuildingSlider()
     {
-        Building building = nameToBuilding[selectedBuilding.Name];
-        float percentValue = building.TimeLeft / building.TimeToBuild;
+        float percentValue = selectedBuilding.TimeLeft / selectedBuilding.TimeToBuild;
         BuildingSlider.GetComponent<UnityEngine.UI.Slider>().value = 100 - (percentValue * 100);
     }
 
-    private void PopulateBuildingDic()
+    private void UpgradeTimeTick(Building building)
     {
-        Transform x = GameObject.Find("/Map").transform;
-        foreach (Transform y in x)
-        {
-            if (y.CompareTag("Building"))
-            {
-                Building building = y.GetComponent<BuildingManager>().Building;
-                nameToBuilding.Add(building.Name, building);
-            }
-        }
-    }
-
-    private void UpgradeTimeTick(BuildingMemory bm)
-    {
-        Building building = nameToBuilding[bm.Name];
         building.TimeLeft -= Time.deltaTime;
         if (building.TimeLeft <= 0)
         {
             Debug.Log("Finished building");
-            int index = GetBuildingMemoryIndex(bm);
-            map.Buildings[index] = map.Buildings[index].SwitchBuildState();
-            UpgradeFinished(bm);
+            building.UpgradeState = false;
+            UpgradeFinished(building);
         }
     }
 
-    private void UpgradeFinished(BuildingMemory bm)
+    private void UpgradeFinished(Building building)
     {
-        this.map.UpgradeBuilding(bm);//Handles level up
-        //this.selectedBuilding = map.Buildings.First(x => x.Name == selectedBuilding.Name);
-        nameToBuilding[bm.Name].UpgradeState = false;
-        if (this.selectedBuilding.Name == bm.Name)
-        {
-            this.selectedBuilding = bm;
-        }
+        building.UpgradeState = false;
+        this.map.UpgradeBuilding(building);//Handles level up
+        //if (this.selectedBuilding.Name == building.Name)
+        //{
+        //    this.selectedBuilding = building;
+        //}
         RequestUIUpdate();
     }
 
-    private void LoadIntoBuildingManager(BuildingManager buildingManager, BuildingMemory bm)
+    public Building NextBuilding(Vector2 direction)
     {
-        buildingManager.buildingName = bm.Name;
-        buildingManager.buildingDescription = bm.Description;
-        buildingManager.buildingLevel = bm.Level;
-        buildingManager.Build(bm.Type);
-    }
-
-    public BuildingMemory NextBuilding(Vector2 direction)
-    {
-        selectedBuilding = map.Buildings.First(x => x.Name == selectedBuilding.Name);
         int index = map.Buildings.IndexOf(selectedBuilding) + (int)direction.x;
         selectedBuilding = (index >= 0 && index < map.Buildings.Count) ? map.Buildings[index] : selectedBuilding;
         GameObject.Find("/UI").GetComponent<UIController>().UpdateBuildingUI(selectedBuilding);
@@ -125,7 +97,7 @@ public class MapManager : MonoBehaviour
             {
                 continue;
             }
-            if (child.position.x == selectedBuilding.PositionX)
+            if (child.position.x == selectedBuilding.Position.X)
             {
                 SelectedBuildingGameObject = child.gameObject;
                 break;
@@ -143,10 +115,9 @@ public class MapManager : MonoBehaviour
     public void UpgradeBuilding(BuildingUpgrade bu)
     {
         Debug.Log("Switched building state");
-        nameToBuilding[this.selectedBuilding.Name].TimeToBuild = bu.Time;
-        nameToBuilding[this.selectedBuilding.Name].TimeLeft = bu.Time;
-        nameToBuilding[this.selectedBuilding.Name].UpgradeState = true;
-        map.Buildings[GetBuildingMemoryIndex(selectedBuilding)] = map.Buildings[GetBuildingMemoryIndex(selectedBuilding)].SwitchBuildState();
+        selectedBuilding.TimeToBuild = bu.Time;
+        selectedBuilding.TimeLeft = bu.Time;
+        selectedBuilding.UpgradeState = true;
     }
 
     private void RequestUIUpdate()
@@ -154,16 +125,16 @@ public class MapManager : MonoBehaviour
         GameObject.Find("/UI").GetComponent<UIController>().UpdateBuildingUI(selectedBuilding);
     }
 
-    private int GetBuildingMemoryIndex(BuildingMemory building)
-    {
-        return map.Buildings.IndexOf(building);
-    }
+    //private int GetBuildingMemoryIndex(BuildingMemory building)
+    //{
+    //    return map.Buildings.IndexOf(building);
+    //}
 }
 
 [System.Serializable]
 public class Map
 {
-    public List<BuildingMemory> Buildings = new List<BuildingMemory>();
+    public List<Building> Buildings = new List<Building>();
 
     public Map(string persistentDataPath)
     {
@@ -172,7 +143,7 @@ public class Map
         if(File.Exists(savePath))
         {
             Debug.Log("SaveLoaded");
-            this.Buildings = SaveManagment.Deserialize<List<BuildingMemory>>(savePath);
+            this.Buildings = SaveManagment.Deserialize<List<Building>>(savePath);
         }
         else
         {
@@ -184,30 +155,34 @@ public class Map
     //Needs refactorization
     private void FirstInit()
     {
-        Buildings.Add(new BuildingMemory("Goldmine", 
-            "You can mine gold in here",
-            BigFloat.BuildNumber(1),
-            0,
-            new Goldmine()));
-        Buildings.Add(new BuildingMemory("Blacksmith", 
-            "You can upgrade your hero in here", 
-            BigFloat.BuildNumber(1),
-            5.92f, 
-            new Blacksmith()));
-        Buildings.Add(new BuildingMemory("Alchemist", 
-            "Create potions",
-            BigFloat.BuildNumber(1),
-            -5.75f, 
-            new Alchemist()));
-        Buildings.Sort((x, y) => x.PositionX.CompareTo(y.PositionX));
+        Alchemist a = new Alchemist("Alchemist", "Desc", new Vector2(-5.75f, 0));
+        Goldmine b = new Goldmine("Goldmine", "Desc", new Vector2(0, 0));
+        Blacksmith c = new Blacksmith("Blacksmith", "Desc", new Vector2(5.92f, 0));
+        this.Buildings.Add(a);
+        this.Buildings.Add(b);
+        this.Buildings.Add(c);
+        Buildings.Sort((x, y) => x.Position.X.CompareTo(y.Position.X));
+        //Buildings.Add(new BuildingMemory("Goldmine", 
+        //    "You can mine gold in here",
+        //    BigFloat.BuildNumber(1),
+        //    0,
+        //    new Goldmine()));
+        //Buildings.Add(new BuildingMemory("Blacksmith", 
+        //    "You can upgrade your hero in here", 
+        //    BigFloat.BuildNumber(1),
+        //    5.92f, 
+        //    new Blacksmith()));
+        //Buildings.Add(new BuildingMemory("Alchemist", 
+        //    "Create potions",
+        //    BigFloat.BuildNumber(1),
+        //    -5.75f, 
+        //    new Alchemist()));
     }
 
     //Upgrades building
-    public void UpgradeBuilding(BuildingMemory building)
+    public void UpgradeBuilding(Building building)
     {
-        int index = this.Buildings.IndexOf(this.Buildings.First(x => x.Name == building.Name));
-        BuildingMemory newBuildingMem = this.Buildings[index].LevelUP();
-        this.Buildings[index] = newBuildingMem;
+        building.LevelUP(BigFloat.BuildNumber(1));
     }
 }
 

@@ -22,7 +22,7 @@ public class BuildingInterfaceManager : MonoBehaviour
         }
         else
         {
-            GameObject.Find("/Map").GetComponent<MapManager>().UpgradeBuilding(this.buildingUpgrade);
+            Debug.Log("<color=red>Not enough money</color>");
         }
     }
 

@@ -41,7 +41,7 @@ public class SaveManagment : MonoBehaviour
     private void SaveMap()
     {
         string mapPath = Path.Combine(Application.persistentDataPath, "Map.bin");
-        Serialize<List<BuildingMemory>>(GameObject.Find("Map").GetComponent<MapManager>().map.Buildings, mapPath);
+        Serialize<List<Building>>(GameObject.Find("Map").GetComponent<MapManager>().map.Buildings, mapPath);
     }
     private void SaveResources()
     {

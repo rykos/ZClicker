@@ -6,6 +6,7 @@ using System.IO;
 
 public class DebugFunctions : MonoBehaviour
 {
+#if UNITY_EDITOR
     [MenuItem("Tools/Flush Save")]
     private static void FlushSave()
     {
@@ -15,7 +16,7 @@ public class DebugFunctions : MonoBehaviour
         RemoveFile(mapPath);
         RemoveFile(ResourcesPath);
     }
-
+#endif
     private static void RemoveFile(string path)
     {
         if (File.Exists(path))

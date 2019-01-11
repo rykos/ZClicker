@@ -127,13 +127,13 @@ public class PlayerControl : MonoBehaviour
         {
             GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraController>().
                 MoveTo(new Vector2(GameObject.Find("Map").GetComponent<MapManager>().
-                NextBuilding(Vector2.left).PositionX, 0));
+                NextBuilding(Vector2.left).Position.X, 0));
         }
         else//left
         {
             GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraController>().
                 MoveTo(new Vector2(GameObject.Find("Map").GetComponent<MapManager>().
-                NextBuilding(Vector2.right).PositionX, 0));
+                NextBuilding(Vector2.right).Position.X, 0));
         }
     }
 

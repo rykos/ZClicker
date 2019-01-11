@@ -58,7 +58,7 @@ public class UIController : MonoBehaviour
         item.transform.Find("Description/DescriptionTMP").GetComponent<TextMeshProUGUI>().text = 
             string.Format(upgrade.Description, val.Value, val.Exponent);
     }
-    public void UpdateBuildingUI(BuildingMemory building)
+    public void UpdateBuildingUI(Building building)
     {
         GameObject.Find("/UI/BuildingLevel/LevelTMP").GetComponent<TextMeshProUGUI>().text = 
             string.Format("{0}{1}", building.Level.baseNumber, building.Level.exponentChar);
