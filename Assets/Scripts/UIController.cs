@@ -13,11 +13,14 @@ public class UIController : MonoBehaviour
     [SerializeField]
     private GameObject bossUI;
     [SerializeField]
+    private GameObject characterUI;
+    [SerializeField]
     private GameObject TapValueTextGO;
     [SerializeField]
     private GameObject TapValueTextBossGO;
     public List<GameObject> buildingUIs = new List<GameObject>();
     #endregion
+    public static UIType selectedUIType = UIType.village;
     private static readonly string _Desc = "{0:0.0}{1}";
     private Resources playerResources;
     private TextMeshProUGUI gold;
@@ -89,4 +92,34 @@ public class UIController : MonoBehaviour
         bossUI.SetActive(!bossUI.activeSelf);
         gameObject.SetActive(!bossUI.activeSelf);
     }
+    public void SwitchUI(GameObject switchedUI)
+    {
+        switchedUI.SetActive(!switchedUI.activeSelf);
+        gameObject.SetActive(!bossUI.activeSelf);
+        switch (switchedUI.tag)
+        {
+            case "VillageInterface":
+                selectedUIType = UIType.village;
+                break;
+
+            case "BossInterface":
+                selectedUIType = UIType.boss;
+                break;
+
+            case "CharacterInterface":
+                selectedUIType = UIType.character;
+                break;
+
+            default:
+                break;
+        }
+    }
+}
+
+public enum UIType
+{
+    village,
+    character,
+    boss,
+    buildingUpgrade
 }

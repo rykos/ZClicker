@@ -30,22 +30,37 @@ public class PlayerControl : MonoBehaviour
         {
             if (touch.phase == TouchPhase.Began)
             {
-                Click click = new Click(touch.fingerId, touch.position);
-                activeClicks.Add(click);
+                TouchBegan(touch);
             }
             else if (touch.phase == TouchPhase.Ended)
             {
-                int index = activeClicks.FindIndex(click => click.fingerId == touch.fingerId);
-                ConsiderClick(activeClicks[index], touch.position);
-                activeClicks.Remove(activeClicks[index]);
+                TouchEnded(touch);
             }
             else
             {
-                int index = activeClicks.FindIndex(click => click.fingerId == touch.fingerId);
-                activeClicks[index] = activeClicks[index].AddTime(Time.deltaTime);
+                TouchActive(touch);
             }
         }
     }
+
+    #region touch handlers
+    private void TouchBegan(Touch touch)
+    {
+        Click click = new Click(touch.fingerId, touch.position);
+        activeClicks.Add(click);
+    }
+    private void TouchActive(Touch touch)
+    {
+        int index = activeClicks.FindIndex(click => click.fingerId == touch.fingerId);
+        activeClicks[index] = activeClicks[index].AddTime(Time.deltaTime);
+    }
+    private void TouchEnded(Touch touch)
+    {
+        int index = activeClicks.FindIndex(click => click.fingerId == touch.fingerId);
+        ConsiderClick(activeClicks[index], touch.position);
+        activeClicks.Remove(activeClicks[index]);
+    }
+    #endregion
 
     private float SignedDegToDeg(float signedDeg)
     {
@@ -75,7 +90,6 @@ public class PlayerControl : MonoBehaviour
         if (IsPointerOverUIObject(newPosition))
         {
             UIClick(click, newPosition);
-            Debug.Log("UI Clicked");
             return;
         }
         Vector2 activePosition = Camera.main.ScreenToWorldPoint(newPosition);
@@ -103,7 +117,7 @@ public class PlayerControl : MonoBehaviour
         {
             if (obj.gameObject.CompareTag("BossInterface"))
             {
-                BossInterface(newPosition);
+                BossInterface(click, newPosition);
                 break;
             }
         }
@@ -160,13 +174,25 @@ public class PlayerControl : MonoBehaviour
     }
 
     #region Interfaces
-    private void BossInterface(Vector2 touchPos)
+    private void BossInterface(Click click, Vector2 touchPos)
     {
         Debug.Log("BossInterface clicked");
         Collider2D colliderTouched = GetColliderAt(touchPos);
         if (colliderTouched)
         {
             colliderTouched.transform.parent.GetComponent<BossManager>().HitBoss(touchPos);
+        }
+    }
+
+    private void PullItemsSlots(Click click, Vector2 touchPos)
+    {
+        PointerEventData ped = new PointerEventData(EventSystem.current);
+        ped.position = touchPos;
+        List<RaycastResult> results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(ped, results);
+        foreach (RaycastResult result in results)
+        {
+            Debug.Log(result.gameObject.tag);
         }
     }
     #endregion

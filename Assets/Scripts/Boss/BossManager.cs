@@ -27,17 +27,20 @@ public class BossManager : MonoBehaviour
     }
     private void Update()
     {
-        if (boss != null && boss.timerActive)
+        if (boss != null)
         {
-            TimeTMP.text = string.Format("{0:0.0}s", boss.Time);
-            boss.Time -= Time.deltaTime;
-        }
-        if (boss.Time < 0)
-        {
-            boss.Time = 0;
-            boss.timerActive = false;
-            boss.Vulnerable = false;
+            if (boss.timerActive)
+            {
+                TimeTMP.text = string.Format("{0:0.0}s", boss.Time);
+                boss.Time -= Time.deltaTime;
+            }
+            if (boss.Time < 0)
+            {
+                boss.Time = 0;
+                boss.timerActive = false;
+                boss.Vulnerable = false;
 
+            }
         }
     }
 

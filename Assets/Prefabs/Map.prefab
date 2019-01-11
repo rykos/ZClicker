@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1925741527857542058}
   m_Layer: 0
   m_Name: Map
-  m_TagString: Untagged
+  m_TagString: VillageInterface
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -47,29 +47,6 @@ MonoBehaviour:
   buildingPrefab: {fileID: 1526104257330828, guid: 43d34c9118135c0478d00f97f8a3c961,
     type: 3}
   BuildingSlider: {fileID: 0}
-  map:
-    Buildings:
-    - Name: Alchemist
-      Description: Create potions
-      Level:
-        baseNumber: 0
-        exponent: 0
-      PositionX: -10
-      BuildActive: 0
-    - Name: Goldmine
-      Description: You can mine gold in here
-      Level:
-        baseNumber: 0
-        exponent: 0
-      PositionX: 0
-      BuildActive: 0
-    - Name: Blacksmith
-      Description: You can upgrade your hero in here
-      Level:
-        baseNumber: 0
-        exponent: 0
-      PositionX: 10
-      BuildActive: 0
 --- !u!1 &6310319577105372801
 GameObject:
   m_ObjectHideFlags: 0

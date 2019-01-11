@@ -7,6 +7,10 @@ TagManager:
   - UI#IGNORE
   - BossInterface
   - Building
+  - CharacterInterface
+  - VillageInterface
+  - ItemSlot
+  - Item
   layers:
   - Default
   - TransparentFX
