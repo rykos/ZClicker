@@ -8,7 +8,7 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Linq;
 
-public class PlayerControl : MonoBehaviour
+public class PlayerControl : MonoBehaviour, IInput
 {
     private List<Click> activeClicks = new List<Click>();
     private MapManager mapManager;
@@ -38,29 +38,10 @@ public class PlayerControl : MonoBehaviour
             }
             else
             {
-                TouchActive(touch);
+                TouchMoved(touch);
             }
         }
     }
-
-    #region touch handlers
-    private void TouchBegan(Touch touch)
-    {
-        Click click = new Click(touch.fingerId, touch.position);
-        activeClicks.Add(click);
-    }
-    private void TouchActive(Touch touch)
-    {
-        int index = activeClicks.FindIndex(click => click.fingerId == touch.fingerId);
-        activeClicks[index] = activeClicks[index].AddTime(Time.deltaTime);
-    }
-    private void TouchEnded(Touch touch)
-    {
-        int index = activeClicks.FindIndex(click => click.fingerId == touch.fingerId);
-        ConsiderClick(activeClicks[index], touch.position);
-        activeClicks.Remove(activeClicks[index]);
-    }
-    #endregion
 
     private float SignedDegToDeg(float signedDeg)
     {
@@ -195,6 +176,29 @@ public class PlayerControl : MonoBehaviour
             Debug.Log(result.gameObject.tag);
         }
     }
+
+    #region touch handlers
+
+    public void TouchBegan(Touch touch)
+    {
+        Click click = new Click(touch.fingerId, touch.position);
+        activeClicks.Add(click);
+    }
+
+    public void TouchMoved(Touch touch)
+    {
+        int index = activeClicks.FindIndex(click => click.fingerId == touch.fingerId);
+        activeClicks[index] = activeClicks[index].AddTime(Time.deltaTime);
+    }
+
+    public void TouchEnded(Touch touch)
+    {
+        int index = activeClicks.FindIndex(click => click.fingerId == touch.fingerId);
+        ConsiderClick(activeClicks[index], touch.position);
+        activeClicks.Remove(activeClicks[index]);
+    }
+    #endregion
+
     #endregion
 }
 

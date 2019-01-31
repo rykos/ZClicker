@@ -48,7 +48,7 @@ public class BossManager : MonoBehaviour
     public void BossExit()
     {
         Debug.Log("Leave Boss module");
-        uiController.SwitchBossUI();
+        uiController.SwitchUI(gameObject);
     }
 
     //Enable character interface

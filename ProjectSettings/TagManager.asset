@@ -11,6 +11,7 @@ TagManager:
   - VillageInterface
   - ItemSlot
   - Item
+  - UI#INTERACT
   layers:
   - Default
   - TransparentFX

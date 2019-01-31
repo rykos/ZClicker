@@ -5,10 +5,16 @@ using System.Linq;
 using UnityEngine.EventSystems;
 using System;
 
+/// <summary>
+/// Generic unit. Active on every building
+/// </summary>
 public class BuildingManager : MonoBehaviour
 {
     #region Building specific predefined
     public GameObject menu;
+    public GameObject specificMenu;
+    [SerializeField]
+    private SelectedBuilding selectedBuilding;//Informs editor what class it should hold
     #endregion
     private Building building;
     public Building Building
@@ -18,19 +24,27 @@ public class BuildingManager : MonoBehaviour
             return this.building;
         }
     }
-
-    public void Build<T>(T type)
+    private Dictionary<SelectedBuilding, Type> sbToType = new Dictionary<SelectedBuilding, Type>
     {
-        building = (Building)(object)type;
-        //building.Name = buildingName;
-        //building.Description = buildingDescription;
-        //building.Level = buildingLevel;
+        { SelectedBuilding.Goldmine, typeof(Goldmine) },
+        { SelectedBuilding.Alchemist, typeof(Alchemist) },
+        { SelectedBuilding.Blacksmith, typeof(Blacksmith) },
+        { SelectedBuilding.Guild, typeof(Guild) }
+    };
+
+    //Builds this building with given type
+    public void Build()
+    {
+        building = (Building)(object)Activator.CreateInstance(sbToType[this.selectedBuilding]);
+        building.Position = (Vector2)transform.position;
+        building.Name = transform.name;
         PersonalizeBuilding();
     }
 
+    //Personalize building setting up specific items
     private void PersonalizeBuilding()
     {
-        SetUI();
+        //SetUI();
     }
 
     public void Interact(Vector2 TappedPosition)
@@ -41,6 +55,16 @@ public class BuildingManager : MonoBehaviour
     public void SwitchMenu()
     {
         menu.SetActive(!menu.activeSelf);
+    }
+
+    private void Awake()
+    {
+        FetchSave();
+        if (building == null)
+        {
+            Build();
+            GameObject.Find("/Map").GetComponent<MapManager>().map.AddBuilding(this.building);
+        }
     }
 
     private void Update()
@@ -58,214 +82,15 @@ public class BuildingManager : MonoBehaviour
         building.Init();
     }
 
+    private void FetchSave()
+    {
+        building = GameObject.Find("/Map").GetComponent<MapManager>().map.FetchBuilding(transform.name);
+    }
+
     //Sync building with its memory
     public void Sync(BuildingMemory bm)
     {
         this.building.Level = bm.Level;
-    }
-}
-
-[System.Serializable]
-public abstract class Building
-{
-    public Vector2Serialize Position;
-    public List<UpgradeMemory> upgradeMemories;
-    public string Name;
-    public string Description;
-    public bool UpgradeState;
-    public float TimeToBuild;//Overall Time
-    public float TimeLeft;
-    public BigFloat Level;
-    public virtual void BuildingInteract(Vector2 TappedPosition)
-    {
-        if (UpgradeState == true)
-        {
-            TimeLeft -= 1;
-            GameObject.Find("UI").GetComponent<UIController>().ShowTapString(MapManager.SelectedBuildingGameObject.transform.Find("Building_Canvas").gameObject, TappedPosition, "-1s");
-        }
-    }
-    public abstract void Init();//Load
-    public abstract void OnUpgrade();
-    public abstract void TimedValue();//Executed 
-    public virtual void LevelUP(BigFloat amount)
-    {
-        this.Level = this.Level + amount;
-        Debug.Log("<color=red>LEVELUP</color>");
-    }
-
-    protected Building(string name, string desc, Vector2 position)
-    {
-        this.Name = name;
-        this.Description = desc;
-        this.Position = position;
-        this.Level = BigFloat.BuildNumber(1);
-        this.UpgradeState = false;
-    }
-}
-
-[System.Serializable]
-public class Goldmine : Building
-{
-    private BigFloat idleValue = BigFloat.BuildNumber(0);//Value earned per second
-    private BigFloat tapPower = BigFloat.BuildNumber(0);//Value earned per tap
-    private float critical = 0f;
-    public override void BuildingInteract(Vector2 TappedPosition)
-    {
-        base.BuildingInteract(TappedPosition);
-        if (UpgradeState == false)
-        {
-            Tap tap = ExecuteTap();
-            MapManager.player.AddGold(tap.amount);
-            //Show tap value on world UI
-            GameObject.Find("UI").GetComponent<UIController>().ShowTapValue(MapManager.SelectedBuildingGameObject.transform.Find("Building_Canvas").gameObject, TappedPosition, tap);
-        }
-    }
-
-    //Collect tap upgrade variables
-    private void CalculateTaps()
-    {
-        BigFloat newTapPower = CollectValues<BigFloat>(UpgradeType.ResourceOnTap);
-        BigFloat ukValue = BigFloat.BuildNumber((float)CollectValues<BigFloat>(UpgradeType.ResourceOnTapPercent) + 1f);
-        float newCriticalTapChance = CollectValues(UpgradeType.CriticalTap);
-        this.tapPower = newTapPower;
-        this.critical = newCriticalTapChance;
-    }
-    private void CalculateValueInTime()
-    {
-        idleValue = CollectValues<BigFloat>(UpgradeType.ValueInTime);
-    }
-
-    public override void Init()
-    {
-        if (upgradeMemories == null)
-        {
-            InitUpgrades();
-        }
-        CalculateTaps();
-    }
-
-    public override void OnUpgrade()
-    {
-        CalculateTaps();
-        CalculateValueInTime();
-    }
-
-    private void InitUpgrades()
-    {
-        Debug.Log("InitUpgrades()");
-        //Only one predefined upgrade
-        upgradeMemories = new List<UpgradeMemory>();
-        UpgradeMemory um = new UpgradeMemory("Pickaxe", 1, BigFloat.BuildNumber(1f), BigFloat.BuildNumber(10f), UpgradeType.ResourceOnTap);
-        upgradeMemories.Add(um);
-    }
-
-    private Tap ExecuteTap()
-    {
-        float critB = UnityEngine.Random.Range(0f, 100f);
-        if (critical > critB)
-        {
-            return new Tap(tapPower * BigFloat.BuildNumber(2), true);
-        }
-        else
-        {
-            return new Tap(tapPower, false);
-        }
-    }
-
-    private float CollectValues(UpgradeType upgradeType)
-    {
-        float returnValue = 0;
-        List<UpgradeMemory> ValidUpgrades = upgradeMemories.FindAll(x => x.UpgradeType == upgradeType);
-        ValidUpgrades.ForEach(x =>
-        {
-            returnValue += (float)x.Value;
-        });
-        return returnValue;
-    }
-    private BigFloat CollectValues<T>(UpgradeType upgradeType)
-    {
-        BigFloat returnValue = BigFloat.BuildNumber(0);
-        List<UpgradeMemory> ValidUpgrades = upgradeMemories.FindAll(x => x.UpgradeType == upgradeType);
-        ValidUpgrades.ForEach(x =>
-        {
-            returnValue += x.Value;
-        });
-        return returnValue;
-    }
-
-    private float _updateTime = 0;
-    public override void TimedValue()
-    {
-        _updateTime += Time.deltaTime;
-        if (_updateTime > 1)
-        {
-            MapManager.player.AddGold(idleValue);
-            _updateTime = 0;
-        }
-    }
-
-    public Goldmine(string name, string desc, Vector2 position) : base(name, desc, position)
-    {
-
-    }
-}
-
-[System.Serializable]
-public class Alchemist : Building
-{
-    public override void BuildingInteract(Vector2 TappedPosition)
-    {
-        base.BuildingInteract(TappedPosition);
-        Debug.Log("Alchemist tapped");
-    }
-
-    public override void Init()
-    {
-        Debug.Log("Init");
-    }
-
-    public override void OnUpgrade()
-    {
-        throw new NotImplementedException();
-    }
-    public override void TimedValue()
-    {
-        //
-    }
-
-    public Alchemist(string name, string desc, Vector2 position) : base(name, desc, position)
-    {
-
-    }
-}
-
-[System.Serializable]
-public class Blacksmith : Building
-{
-    public override void BuildingInteract(Vector2 TappedPosition)
-    {
-        base.BuildingInteract(TappedPosition);
-        Debug.Log("Blacksmith tapped");
-    }
-
-    public override void Init()
-    {
-        Debug.Log("Init");
-    }
-
-    public override void OnUpgrade()
-    {
-        throw new NotImplementedException();
-    }
-
-    public override void TimedValue()
-    {
-        //
-    }
-    
-    public Blacksmith(string name, string desc, Vector2 position) : base(name, desc, position)
-    {
-
     }
 }
 
@@ -339,4 +164,12 @@ public struct Vector2Serialize
     {
         return new Vector2Serialize(vec.x, vec.y);
     }
+}
+
+public enum SelectedBuilding
+{
+    Goldmine,
+    Blacksmith,
+    Alchemist,
+    Guild
 }

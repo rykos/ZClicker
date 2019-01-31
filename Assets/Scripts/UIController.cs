@@ -24,10 +24,13 @@ public class UIController : MonoBehaviour
     private static readonly string _Desc = "{0:0.0}{1}";
     private Resources playerResources;
     private TextMeshProUGUI gold;
+    private PlayerInputManager playerInputManager;
+
 
     private void Awake()
     {
         gold = GameObject.Find("Gold_TMP").GetComponent<TextMeshProUGUI>();
+        playerInputManager = GameObject.Find("EventSystem").GetComponent<PlayerInputManager>();
     }
     private void Start()
     {
@@ -57,7 +60,7 @@ public class UIController : MonoBehaviour
         var cost = upgrade.Cost.GetString();
         var val = upgrade.Value.GetString();
         item.transform.Find("Cost/CostTMP").GetComponent<TextMeshProUGUI>().text = string.Format(_Desc, cost.Value, cost.Exponent);
-        item.transform.Find("Level/LevelTMP").GetComponent<TextMeshProUGUI>().text = "0";
+        item.transform.Find("Level/LevelTMP").GetComponent<TextMeshProUGUI>().text = upgrade.Level.ToString();
         item.transform.Find("Description/DescriptionTMP").GetComponent<TextMeshProUGUI>().text = 
             string.Format(upgrade.Description, val.Value, val.Exponent);
     }
@@ -87,32 +90,29 @@ public class UIController : MonoBehaviour
         tapText.GetComponent<TextMeshProUGUI>().text = text;
     }
 
-    public void SwitchBossUI()
-    {
-        bossUI.SetActive(!bossUI.activeSelf);
-        gameObject.SetActive(!bossUI.activeSelf);
-    }
     public void SwitchUI(GameObject switchedUI)
     {
         switchedUI.SetActive(!switchedUI.activeSelf);
-        gameObject.SetActive(!bossUI.activeSelf);
-        switch (switchedUI.tag)
+        if (switchedUI.activeSelf)
         {
-            case "VillageInterface":
-                selectedUIType = UIType.village;
-                break;
+            switch (switchedUI.tag)
+            {
+                case "VillageInterface":
+                    selectedUIType = UIType.village;
+                    break;
 
-            case "BossInterface":
-                selectedUIType = UIType.boss;
-                break;
+                case "BossInterface":
+                    selectedUIType = UIType.boss;
+                    break;
 
-            case "CharacterInterface":
-                selectedUIType = UIType.character;
-                break;
-
-            default:
-                break;
+                case "CharacterInterface":
+                    selectedUIType = UIType.character;
+                    break;
+                default:
+                    break;
+            }
         }
+        playerInputManager.ChangePlayerInput(switchedUI);
     }
 }
 

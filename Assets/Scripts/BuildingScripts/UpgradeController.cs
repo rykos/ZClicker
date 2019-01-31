@@ -4,6 +4,9 @@ using UnityEngine;
 using System.Linq;
 using System;
 
+/// <summary>
+/// Single building upgrade
+/// </summary>
 public class UpgradeController : MonoBehaviour
 {
     [SerializeField]
@@ -30,7 +33,7 @@ public class UpgradeController : MonoBehaviour
         {
             Debug.Log("Create new upgrade ");
             UpgradeMemory newUpgradeMemory = new UpgradeMemory
-                (this.upgrade.Name, 0, this.upgrade.Value,
+                (this.upgrade.Name, upgrade.Level, this.upgrade.Value,
                 this.upgrade.Cost, this.upgrade.upgradeType);
             updatedMemory = NextUpgradeMemory(newUpgradeMemory);
             FindParentBuilding().gameObject.GetComponent<BuildingManager>().Building.upgradeMemories.Add(updatedMemory);
@@ -164,6 +167,7 @@ public struct UpgradeControllerData//Hand tweaked data inside Editor
 {
     public string Name;
     public string Description;
+    public int Level;
     public BigFloat Value;
     public BigFloat Cost;
     public float BasicUpgradeTime;
@@ -422,6 +426,10 @@ public struct BigFloat
     public static explicit operator float(BigFloat bigFloat)
     {
         return bigFloat.baseNumber * (float)(Math.Pow(10, bigFloat.exponent));
+    }
+    public static implicit operator BigFloat(float number)
+    {
+        return BigFloat.BuildNumber(number);
     }
 
     public override string ToString()

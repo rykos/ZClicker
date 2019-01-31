@@ -27,15 +27,16 @@ public class MapManager : MonoBehaviour
     }
     private void Start()
     {
-        foreach (Building building in map.Buildings)
-        {
-            var newBuilding = Instantiate(buildingPrefab, this.transform);
-            newBuilding.transform.localPosition = new Vector2(building.Position.X, -2);
-            BuildingManager buildingManager = newBuilding.GetComponent<BuildingManager>();
-            buildingManager.Build(building);
-            newBuilding.transform.Find("Model").GetComponent<SpriteRenderer>().sprite = UnityEngine.Resources.Load<Sprite>("Buildings/" + building.Name);
-        }
+        //foreach (Building building in map.Buildings)
+        //{
+        //    var newBuilding = Instantiate(buildingPrefab, this.transform);
+        //    newBuilding.transform.localPosition = new Vector2(building.Position.X, -2);
+        //    BuildingManager buildingManager = newBuilding.GetComponent<BuildingManager>();
+        //    buildingManager.Build(building);
+        //    newBuilding.transform.Find("Model").GetComponent<SpriteRenderer>().sprite = UnityEngine.Resources.Load<Sprite>("Buildings/" + building.Name);
+        //}
         selectedBuilding = map.Buildings.Find(x => x.Name == "Goldmine");
+        map.SortBuildings();
         RequestUIUpdate();
         FindBuildingGameobject();
     }
@@ -155,34 +156,52 @@ public class Map
     //Needs refactorization
     private void FirstInit()
     {
-        Alchemist a = new Alchemist("Alchemist", "Desc", new Vector2(-5.75f, 0));
-        Goldmine b = new Goldmine("Goldmine", "Desc", new Vector2(0, 0));
-        Blacksmith c = new Blacksmith("Blacksmith", "Desc", new Vector2(5.92f, 0));
-        this.Buildings.Add(a);
-        this.Buildings.Add(b);
-        this.Buildings.Add(c);
-        Buildings.Sort((x, y) => x.Position.X.CompareTo(y.Position.X));
-        //Buildings.Add(new BuildingMemory("Goldmine", 
-        //    "You can mine gold in here",
-        //    BigFloat.BuildNumber(1),
-        //    0,
-        //    new Goldmine()));
-        //Buildings.Add(new BuildingMemory("Blacksmith", 
-        //    "You can upgrade your hero in here", 
-        //    BigFloat.BuildNumber(1),
-        //    5.92f, 
-        //    new Blacksmith()));
-        //Buildings.Add(new BuildingMemory("Alchemist", 
-        //    "Create potions",
-        //    BigFloat.BuildNumber(1),
-        //    -5.75f, 
-        //    new Alchemist()));
+        //Alchemist a = new Alchemist("Alchemist", "Desc", new Vector2(-5.75f, 0));
+        //Goldmine b = new Goldmine("Goldmine", "Desc", new Vector2(0, 0));
+        //Blacksmith c = new Blacksmith("Blacksmith", "Desc", new Vector2(5.92f, 0));
+        //Guild d = new Guild("Guild", "Desc", new Vector2(-5.75f-5.75f,0));
+        //this.Buildings.Add(a);
+        //this.Buildings.Add(b);
+        //this.Buildings.Add(c);
+        //this.Buildings.Add(d);
+        //Buildings.Sort((x, y) => x.Position.X.CompareTo(y.Position.X));
     }
 
     //Upgrades building
     public void UpgradeBuilding(Building building)
     {
         building.LevelUP(BigFloat.BuildNumber(1));
+    }
+
+    public void AddBuilding(Building building)
+    {
+        if (this.Buildings.Find(x => x.Name == building.Name) != null)
+        {
+            return;
+        }
+        this.Buildings.Add(building);
+    }
+
+    public Building FetchBuilding(string buildingName)
+    {
+        Building fetch = this.Buildings.Find(x => x.Name == buildingName);
+        if (fetch!=null)
+        {
+            return fetch;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public void SortBuildings()
+    {
+        this.Buildings.Sort((x,y) => x.Position.X.CompareTo(y.Position.X));
+        foreach (Building b in this.Buildings)
+        {
+            Debug.Log(b.Name);
+        }
     }
 }
 
