@@ -468,4 +468,9 @@ public struct BigFloatString
         this.Value = value;
         this.Exponent = expo;
     }
+
+    public static implicit operator BigFloatString(BigFloat bigFloat)
+    {
+        return new BigFloatString(bigFloat.baseNumber, bigFloat.exponentChar.ToString());
+    }
 }

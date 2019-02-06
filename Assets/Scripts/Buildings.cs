@@ -24,7 +24,7 @@ public abstract class Building
     }
     public abstract void Init();//Load
     public abstract void OnUpgrade();
-    public abstract void TimedValue();//Executed 
+    public abstract void TimedValue();//Executed
     public virtual void LevelUP(BigFloat amount)
     {
         this.Level = this.Level + amount;
@@ -199,6 +199,7 @@ public class Blacksmith : Building
 [System.Serializable]
 public class Guild : Building
 {
+    public List<Hero> Heroes = new List<Hero>();
 
     public override void Init()
     {

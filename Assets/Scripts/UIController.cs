@@ -69,6 +69,12 @@ public class UIController : MonoBehaviour
         GameObject.Find("/UI/BuildingLevel/LevelTMP").GetComponent<TextMeshProUGUI>().text = 
             string.Format("{0}{1}", building.Level.baseNumber, building.Level.exponentChar);
     }
+    //Update inner building UI with sent parameter*
+    public void UpdateBuildingInnerUI(GameObject target, GenericBuildingInnerUI gbi)
+    {
+        Debug.Log(target.gameObject);
+        target.transform.Find("Interface/BuildingDescription/Description").GetComponent<TextMeshProUGUI>().text = gbi.ToString();
+    }
 
     public void ShowTapValue(GameObject canvas, Vector2 position, Tap tap)
     {
@@ -122,4 +128,27 @@ public enum UIType
     character,
     boss,
     buildingUpgrade
+}
+
+/// <summary>
+/// Container for generic inner UI, 
+/// </summary>
+public struct GenericBuildingInnerUI
+{
+    public string MainDescription;
+    public BigFloatString Cost;
+    public string Time;
+
+    public GenericBuildingInnerUI(string mainDescription, BigFloatString cost, string time)
+    {
+        this.MainDescription = mainDescription;
+        this.Cost = cost;
+        this.Time = time;
+    }
+
+    public override string ToString()
+    {
+        string result = string.Format("{0}\n{1:0}{2}G\n{3}", MainDescription, Cost.Value, Cost.Exponent, Time);
+        return result;
+    }
 }

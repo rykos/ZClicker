@@ -9,6 +9,7 @@ public class GuildBuildingManager : MonoBehaviour, IInput
     public GameObject DungeonsUI;
     public GameObject RecrutationUI;
     public GameObject HeroDetailsUI;
+    public GameObject HeroPreviewPrefab;
     #endregion
     public GuildInterfaceState IState
     {
@@ -16,12 +17,24 @@ public class GuildBuildingManager : MonoBehaviour, IInput
         set
         {
             this.istate = value;
+            if (this.istate == GuildInterfaceState.main)
+            {
+                LoadHeroes();
+            }
         }
     }
     private GuildInterfaceState istate = GuildInterfaceState.main;
     private bool touchSensitive = true;
     private float touchFrozenTime = 0f;
+    private TouchHandler touchHandler = new TouchHandler();
+    private UIHandler uiHandler;
+    public Building building;
 
+    private void Awake()
+    {
+        uiHandler = new UIHandler(this.gameObject, this);
+        this.building = FindBuildingManagerInParent().Building;
+    }
     private void Update()
     {
         if (touchSensitive == false)
@@ -49,6 +62,7 @@ public class GuildBuildingManager : MonoBehaviour, IInput
                 TouchEnded(touch);
             }
         }
+        touchHandler.TouchAddTime(Time.deltaTime);
     }
 
     //Open hero details page, and fills it with hero details
@@ -67,6 +81,10 @@ public class GuildBuildingManager : MonoBehaviour, IInput
         List<GameObject> gameObjects = new List<GameObject>();
         foreach (var res in raycastResults)
         {
+            if (res.gameObject.CompareTag("UI#IGNORE"))
+            {
+                break;
+            }
             gameObjects.Add(res.gameObject);
         }
         return gameObjects;
@@ -75,13 +93,19 @@ public class GuildBuildingManager : MonoBehaviour, IInput
     public void Button_Dungeons()
     {
         Debug.Log("Dungeons");
+        IState = GuildInterfaceState.Dungeons;
         DungeonsUI.SetActive(true);
     }
 
     public void Button_Recrutation()
     {
-        Debug.Log("Recrutation");
-        RecrutationUI.SetActive(true);
+        //Debug.Log("Recrutation");
+        //List<Hero> heroes = (FindBuildingManagerInParent().Building as Guild).Heroes;
+        //heroes.Add(new Hero("Bob", new Level(24, 1000)));
+        //LoadHeroes();
+        //IState = GuildInterfaceState.Recrutation;
+        //RecrutationUI.SetActive(true);
+        this.uiHandler.SwitchUITo(RecrutationUI);
     }
 
     public void FreezeTouch(float time = 0.1f)
@@ -89,9 +113,64 @@ public class GuildBuildingManager : MonoBehaviour, IInput
         touchSensitive = false;
     }
 
+    public void OnEnable()
+    {
+        LoadHeroes();
+    }
+
+    //Loads heroes gameobjects to display list 
+    public void LoadHeroes()
+    {
+        GameObject list = GameObject.Find("Interface/Content/ScrollingList");
+        Transform buildingT = this.transform;
+        var heroes = (FindBuildingManagerInParent().Building as Guild).Heroes;
+        foreach (Hero hero in heroes)
+        {
+            List<Hero> loadedHeroes = LoadedHeroes(list.transform);
+            if (loadedHeroes.Contains(hero))
+            {
+                Debug.Log("We have him");
+            }
+            else
+            {
+                GameObject HeroGO = Instantiate(HeroPreviewPrefab, list.transform);
+                HeroGO.GetComponent<GuildHero>().Hero = hero;
+            }
+        } 
+    }
+
+    private List<Hero> LoadedHeroes(Transform list)
+    {
+        List<Hero> heroes = new List<Hero>();
+        foreach (Transform heroGO in list)
+        {
+            heroes.Add(heroGO.GetComponent<GuildHero>().Hero);
+        }
+        return heroes;
+    }
+
+    private BuildingManager FindBuildingManagerInParent()
+    {
+        Transform lt = this.transform;
+        while (lt.GetComponent<BuildingManager>() == null)
+        {
+            lt = lt.parent;
+        }
+        return lt.GetComponent<BuildingManager>();
+    }
+
+    public void SwitchTo(GameObject newUI)
+    {
+        this.uiHandler.SwitchUITo(newUI);
+    }
+
+    #region TouchHandlers
     public void TouchBegan(Touch touch)
     {
-        Debug.Log(touch.fingerId + " began");
+        if (this.IState == GuildInterfaceState.main)
+        {
+            touchHandler.AddTouch(touch);
+        }
     }
 
     public void TouchMoved(Touch touch)
@@ -102,31 +181,47 @@ public class GuildBuildingManager : MonoBehaviour, IInput
     public void TouchEnded(Touch touch)
     {
         List<GameObject> clickedGameObjects = FetchGameObjects(touch.position);
+        TouchTime tt = touchHandler.GetTouch((byte)touch.fingerId);
+
         if (this.IState == GuildInterfaceState.main)
         {
             foreach (var go in clickedGameObjects)
             {
-                if (go.CompareTag("UI#HERO"))
+                if (tt.Time < 0.15f)
                 {
-                    Hero hero = go.GetComponent<GuildHero>().hero;
-                    this.OpenHeroDetails(hero);
-                    break;
+                    HeroClick(go);
                 }
             }
         }
         else if(this.IState == GuildInterfaceState.heroDetails)
         {
-
+            
         }
         else if (this.IState == GuildInterfaceState.Recrutation)
         {
-
+            foreach (var go in clickedGameObjects)
+            {
+                if (tt.Time < 0.15f)
+                {
+                    HeroClick(go);
+                }
+            }
         }
         else if (this.IState == GuildInterfaceState.Dungeons)
         {
 
         }
     }
+    #endregion
+    private void HeroClick(GameObject go)
+    {
+        if (go.CompareTag("UI#HERO"))
+        {
+            Hero hero = go.GetComponent<GuildHero>().Hero;
+            this.OpenHeroDetails(hero);
+        }
+    }
+
 }
 public enum GuildInterfaceState
 {
@@ -144,4 +239,99 @@ interface IInput
     void TouchBegan(Touch touch);
     void TouchMoved(Touch touch);
     void TouchEnded(Touch touch);
+}
+
+struct TouchTime
+{
+    public byte FingerID;
+    public float Time;
+
+    public TouchTime(byte id, float time = 0)
+    {
+        this.FingerID = id;
+        this.Time = time;
+    }
+    public static TouchTime operator +(TouchTime x, float time)
+    {
+        return new TouchTime(x.FingerID, x.Time + time);
+    }
+}
+
+class TouchHandler
+{
+    public List<TouchTime> touchTimes = new List<TouchTime>();
+
+    public TouchTime GetTouch(byte id, bool delete = true)
+    {
+        TouchTime tt = this.touchTimes.Find(x => x.FingerID == id);
+        Debug.Log("Touch removed -" + tt.FingerID);
+        touchTimes.Remove(tt);
+        return tt;
+    }
+
+    public void TouchAddTime(float time)
+    {
+        for(var i = 0; i < this.touchTimes.Count; i++)
+        {
+            this.touchTimes[i] += time;
+        }
+    }
+
+    public void AddTouch(Touch touch)
+    {
+        TouchTime tt = new TouchTime((byte)touch.fingerId);
+        Debug.Log("<color=red>Touch added +</color>" + tt.FingerID);
+        this.touchTimes.Add(tt);
+    }
+}
+
+/// <summary>
+/// Handles transition between ui's
+/// </summary>
+class UIHandler
+{
+    private GuildBuildingManager guildBuildingManager;
+    private GameObject MainUI;
+    private GameObject ActiveUI;//UI that is currently shown to user
+    public UIHandler(GameObject mainUI, GuildBuildingManager gbm)
+    {
+        this.ActiveUI = mainUI;
+        this.MainUI = mainUI;
+        this.guildBuildingManager = gbm;
+    }
+    public void SwitchUITo(GameObject newUI)
+    {
+        DisableUI(ActiveUI);
+        if (newUI == null)
+        {
+            this.guildBuildingManager.IState = GuildInterfaceState.main;
+            return;
+        }
+        if (newUI == MainUI)
+        {
+            this.guildBuildingManager.IState = GuildInterfaceState.main;
+        }
+        else if (newUI.name == "UI_Guild_Recrutation")
+        {
+            this.guildBuildingManager.IState = GuildInterfaceState.Recrutation;
+        }
+        else if (newUI.name == "UI_Guild_Dungeons")
+        {
+            this.guildBuildingManager.IState = GuildInterfaceState.Dungeons;
+        }
+        else if (newUI.name == "UI_Guild_Hero_Details")
+        {
+            this.guildBuildingManager.IState = GuildInterfaceState.heroDetails;
+        }
+        newUI.SetActive(true);
+        this.ActiveUI = newUI;
+    }
+
+    private void DisableUI(GameObject ui)
+    {
+        if (ui != MainUI)
+        {
+            ui.SetActive(false);
+        }
+    }
 }

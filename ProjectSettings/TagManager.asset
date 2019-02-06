@@ -12,6 +12,7 @@ TagManager:
   - ItemSlot
   - Item
   - UI#INTERACT
+  - UI#HERO
   layers:
   - Default
   - TransparentFX

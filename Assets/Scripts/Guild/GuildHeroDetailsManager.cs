@@ -13,7 +13,6 @@ public class GuildHeroDetailsManager : MonoBehaviour
     public GuildBuildingManager guildBuildingManager;
     #endregion
     private Hero activeHero;
-
     private void OnDisable()
     {
         activeHero = null;

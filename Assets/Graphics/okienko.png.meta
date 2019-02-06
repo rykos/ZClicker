@@ -99,18 +99,18 @@ TextureImporter:
       name: okienko_0
       rect:
         serializedVersion: 2
-        x: 55
-        y: 56
-        width: 890
-        height: 888
+        x: 85
+        y: 85
+        width: 828
+        height: 828
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5628fbf94725627479717402aba970ae
+      spriteID: 049138a2e6da8004b8f8bc458c1dda41
       vertices: []
       indices: 
       edges: []

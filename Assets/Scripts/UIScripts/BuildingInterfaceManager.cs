@@ -2,9 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Located in building main interface
+/// </summary>
 public class BuildingInterfaceManager : MonoBehaviour
 {
     public BuildingUpgrade buildingUpgrade;
+
     //Hides active building menu
     public void HideMenu()
     {
@@ -41,6 +45,14 @@ public class BuildingInterfaceManager : MonoBehaviour
             }
         }
         return true;
+    }
+
+    //Validate data on enable
+    public void OnEnable()
+    {
+        BigFloatString bfs = this.buildingUpgrade.GoldCost;
+        GenericBuildingInnerUI gbi = new GenericBuildingInnerUI("Desc", bfs, this.buildingUpgrade.Time + "s");
+        GameObject.Find("/UI").GetComponent<UIController>().UpdateBuildingInnerUI(this.gameObject, gbi);
     }
 }
 

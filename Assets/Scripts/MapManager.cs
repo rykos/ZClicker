@@ -70,14 +70,12 @@ public class MapManager : MonoBehaviour
         }
     }
 
+    //Called on sucessfull upgrade
     private void UpgradeFinished(Building building)
     {
         building.UpgradeState = false;
         this.map.UpgradeBuilding(building);//Handles level up
-        //if (this.selectedBuilding.Name == building.Name)
-        //{
-        //    this.selectedBuilding = building;
-        //}
+
         RequestUIUpdate();
     }
 
@@ -112,7 +110,7 @@ public class MapManager : MonoBehaviour
         SelectedBuildingGameObject.GetComponent<BuildingManager>().SwitchMenu();
     }
 
-    //Called on upgrade click
+    //Called on upgrade click. Switches build state to active
     public void UpgradeBuilding(BuildingUpgrade bu)
     {
         Debug.Log("Switched building state");

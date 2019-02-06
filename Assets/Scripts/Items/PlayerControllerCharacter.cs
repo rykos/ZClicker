@@ -61,22 +61,42 @@ public class PlayerControllerCharacter : MonoBehaviour
     private void TouchEnded(Touch touch)
     {
         int clickID = clickDatas.IndexOf(clickDatas.Find(c => c.FingerID == touch.fingerId));
-        if (clickDatas[clickID].Item != null)
+        if (clickDatas[clickID].Item != null)//Item clicked
         {
+            GameObject Item = clickDatas[clickID].Item;
             ClickData fetchNew = ScanClick(touch, clickDatas[clickID]);
-            if (fetchNew.ItemSlot != null && fetchNew.Item == null)
+            if (fetchNew.ItemSlot != null && fetchNew.Item == null && ItemSlotTypeValid(Item, fetchNew.ItemSlot))//There a slot but not an item
             {
-                Debug.Log("Free slot");
-                clickDatas[clickID].Item.transform.SetParent(fetchNew.ItemSlot.transform);
+                //Free slot
+                Item.transform.SetParent(fetchNew.ItemSlot.transform);
+            }
+            else if (fetchNew.Item != null && fetchNew.ItemSlot != null && fetchNew.action == ClickDataAction.showDescription)//There is a slot and item
+            {
+                Debug.Log("Should i Display Log Message");
             }
             else//Taken slot
             {
                 Debug.Log("Taken slot");
-                clickDatas[clickID].Item.transform.SetParent(clickDatas[clickID].ItemSlot.transform);
+                Item.transform.SetParent(clickDatas[clickID].ItemSlot.transform);
             }
             clickDatas[clickID].Item.transform.localPosition = new Vector2(0, 0);
         }
         clickDatas.RemoveAt(clickID);
+    }
+
+    //Checks if held item and item slot are the valid types
+    public bool ItemSlotTypeValid(GameObject heldItem, GameObject ItemSlot)
+    {
+        ItemType heldType = heldItem.GetComponent<ItemController>().item.itemType;
+        ItemType slotType = ItemSlot.transform.GetComponent<ItemSlotManager>().HeldItemType;
+        if (heldType == slotType || slotType == ItemType.Everything)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
     #endregion
 
@@ -89,30 +109,40 @@ public class PlayerControllerCharacter : MonoBehaviour
         ClickData cd = new ClickData() { FingerID = touch.fingerId };
         foreach (RaycastResult rr in results)
         {
-            if (rr.gameObject.CompareTag("ItemSlot"))
+            if (rr.gameObject.CompareTag("ItemSlot"))//Over slot
             {
-                if (heldData != null && heldData.Value.ItemSlot != rr.gameObject)
+                if (heldData != null && heldData.Value.ItemSlot != rr.gameObject)//Held something & item held primary slot != this slot
                 {
-                    cd.ItemSlot = rr.gameObject;
+                    cd.ItemSlot = rr.gameObject.transform.parent.gameObject;//Data slot = this
                 }
-                else if (heldData == null)
+                else if (heldData != null && heldData.Value.ItemSlot == rr.gameObject)//Held item & held slot == this slot
                 {
-                    cd.ItemSlot = rr.gameObject;
+                    cd.action = ClickDataAction.showDescription;
+                    cd.ItemSlot = rr.gameObject.transform.parent.gameObject;
+                }
+                else if (heldData == null)//Nothing was held
+                {
+                    cd.ItemSlot = rr.gameObject.transform.parent.gameObject;//Data slot = this slot
                 }
             }
-            else if (rr.gameObject.CompareTag("Item"))
+            else if (rr.gameObject.CompareTag("Item"))//Over item
             {
-                if (heldData != null && heldData.Value.Item != rr.gameObject)
+                if (heldData != null && heldData.Value.Item != rr.gameObject)//Held something & held item != this item
                 {
+                    cd.Item = rr.gameObject;//Data item = this item
+                }
+                else if (heldData != null && heldData.Value.Item == rr.gameObject)//Drag on itself
+                {
+                    cd.action = ClickDataAction.showDescription;
                     cd.Item = rr.gameObject;
                 }
-                else if (heldData == null)
+                else if (heldData == null)//Nothing was held
                 {
-                    cd.Item = rr.gameObject;
+                    cd.Item = rr.gameObject;//Data item = this item
                 }
             }
         }
-        if(cd.Item != null)
+        if(cd.Item != null && cd.action == default)//Item pointed
         {
             cd.action = ClickDataAction.move;
         }
@@ -135,6 +165,8 @@ public class PlayerControllerCharacter : MonoBehaviour
     }
     enum ClickDataAction
     {
+        none,
         move,
+        showDescription
     }
 }

@@ -13,6 +13,17 @@ public class PlayerInputManager : MonoBehaviour
     private PlayerControl playerControl;
     //
     private MonoBehaviour activeInputHandler;
+    public MonoBehaviour ActiveInputHandler
+    {
+        get
+        {
+            return this.activeInputHandler;
+        }
+        set
+        {
+            this.activeInputHandler = value;
+        }
+    }
 
     private void Awake()
     {
@@ -36,10 +47,6 @@ public class PlayerInputManager : MonoBehaviour
             case "VillageInterface":
                 playerControl.enabled = true;
                 activeInputHandler = playerControl;
-                break;
-            case "CharacterInterface":
-                playerControllerCharacter.enabled = true;
-                activeInputHandler = playerControllerCharacter;
                 break;
             default:
                 break;
