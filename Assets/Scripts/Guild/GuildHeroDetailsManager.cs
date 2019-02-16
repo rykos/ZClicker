@@ -40,4 +40,10 @@ public class GuildHeroDetailsManager : MonoBehaviour
     {
         this.guildBuildingManager.SellHero(this.activeHero);
     }
+
+    public void BuyHero()
+    {
+        (GameObject.Find("BuildingInterface_Guild").GetComponent<GuildBuildingManager>().building as Guild).Heroes.Add(activeHero);
+        guildBuildingManager.SwitchTo(guildBuildingManager.gameObject);
+    }
 }

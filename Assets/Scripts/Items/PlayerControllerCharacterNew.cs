@@ -57,8 +57,8 @@ public class PlayerControllerCharacterNew : MonoBehaviour, IInput
         ActiveTouch oldTouch = GetActiveTouch(touch.fingerId);
         if (oldTouch.ClickedItem != null)
         {
-            Vector2 newPosition = Camera.main.ScreenToWorldPoint(touch.position);
-            oldTouch.ClickedItem.transform.position = newPosition;
+            //Vector2 newPosition = Camera.main.ScreenToWorldPoint(touch.position);
+            oldTouch.ClickedItem.transform.position = touch.position;
         }
     }
     #endregion

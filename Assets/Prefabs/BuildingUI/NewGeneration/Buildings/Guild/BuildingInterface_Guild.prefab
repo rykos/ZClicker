@@ -1077,7 +1077,7 @@ PrefabInstance:
         type: 3}
       propertyPath: heroPreviewPrefab
       value: 
-      objectReference: {fileID: 162794757317124598, guid: bc548d87bba81814a82a519ab6ce84c2,
+      objectReference: {fileID: 5552402467672779136, guid: c2d6a01ee0cc2b945867d65c22f42b4d,
         type: 3}
     - target: {fileID: 6306711259188561810, guid: 07fedc55d72379b4fb52300e2bfd1b16,
         type: 3}
@@ -1285,6 +1285,12 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3199305112679323572, guid: 7e774e5e5a5e9ac4086c28816135b5f5,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300016, guid: 1e8e5521aa1c4f74b8c5c97971bdd21f,
+        type: 3}
     - target: {fileID: 4124016038225144992, guid: 7e774e5e5a5e9ac4086c28816135b5f5,
         type: 3}
       propertyPath: m_isRightToLeft
