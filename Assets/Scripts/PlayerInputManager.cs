@@ -48,7 +48,13 @@ public class PlayerInputManager : MonoBehaviour
                 playerControl.enabled = true;
                 activeInputHandler = playerControl;
                 break;
+            case "BossInterface":
+                Debug.Log("BI detected");
+                playerControl.enabled = true;
+                activeInputHandler = playerControl;
+                break;
             default:
+                Debug.Log("Def state");
                 break;
         }
     }

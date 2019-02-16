@@ -35,6 +35,7 @@ public class PlayerControllerCharacterNew : MonoBehaviour, IInput
         //Check event
         if (newTouch.ClickedSlot == oldTouch.ClickedSlot)//Click
         {
+            RestoreItemLocation(oldTouch);
             OpenItemDescription(oldTouch);
         }
         else if (newTouch.ClickedItem == null && newTouch.ClickedSlot != null && CompatibilityTest(oldTouch.ClickedItem, newTouch.ClickedSlot))//Move item to new slot
@@ -56,7 +57,8 @@ public class PlayerControllerCharacterNew : MonoBehaviour, IInput
         ActiveTouch oldTouch = GetActiveTouch(touch.fingerId);
         if (oldTouch.ClickedItem != null)
         {
-            oldTouch.ClickedItem.transform.position = touch.position;
+            Vector2 newPosition = Camera.main.ScreenToWorldPoint(touch.position);
+            oldTouch.ClickedItem.transform.position = newPosition;
         }
     }
     #endregion

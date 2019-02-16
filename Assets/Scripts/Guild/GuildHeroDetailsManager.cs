@@ -35,4 +35,9 @@ public class GuildHeroDetailsManager : MonoBehaviour
         guildBuildingManager.FreezeTouch();
         gameObject.SetActive(false);
     }
+
+    public void SellHero(Button sender)
+    {
+        this.guildBuildingManager.SellHero(this.activeHero);
+    }
 }

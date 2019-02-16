@@ -9,6 +9,7 @@ public class GuildBuildingManager : MonoBehaviour, IInput
     public GameObject DungeonsUI;
     public GameObject RecrutationUI;
     public GameObject HeroDetailsUI;
+    public GameObject HeroDetailsUIShop;
     public GameObject HeroPreviewPrefab;
     #endregion
     public GuildInterfaceState IState
@@ -66,10 +67,11 @@ public class GuildBuildingManager : MonoBehaviour, IInput
     }
 
     //Open hero details page, and fills it with hero details
-    private void OpenHeroDetails(Hero hero)
+    private void OpenHeroDetails(Hero hero, GameObject prefab)
     {
-        HeroDetailsUI.SetActive(true);
-        HeroDetailsUI.GetComponent<GuildHeroDetailsManager>().FillDetails(hero);
+        //prefab.SetActive(true);
+        SwitchTo(prefab);
+        prefab.GetComponent<GuildHeroDetailsManager>().FillDetails(hero);
     }
 
     public List<GameObject> FetchGameObjects(Vector2 position)
@@ -139,6 +141,23 @@ public class GuildBuildingManager : MonoBehaviour, IInput
         } 
     }
 
+    public void DestroyHeroGameobject(Hero hero)
+    {
+        GameObject list = GameObject.Find("Interface/Content/ScrollingList");
+        foreach (Transform t in list.transform)
+        {
+            GuildHero gHero = t.GetComponent<GuildHero>();
+            if (gHero != null)
+            {
+                if(gHero.Hero == hero)
+                {
+                    Destroy(t.gameObject);
+                    break;
+                }
+            }
+        }
+    }
+
     private List<Hero> LoadedHeroes(Transform list)
     {
         List<Hero> heroes = new List<Hero>();
@@ -187,7 +206,7 @@ public class GuildBuildingManager : MonoBehaviour, IInput
         {
             foreach (var go in clickedGameObjects)
             {
-                if (tt.Time < 0.15f)
+                if (tt.Time < 0.10f)
                 {
                     HeroClick(go);
                 }
@@ -201,9 +220,9 @@ public class GuildBuildingManager : MonoBehaviour, IInput
         {
             foreach (var go in clickedGameObjects)
             {
-                if (tt.Time < 0.15f)
+                if (tt.Time < 0.1f)
                 {
-                    HeroClick(go);
+                    HeroClick(go, HeroDetailsUIShop);
                 }
             }
         }
@@ -213,13 +232,25 @@ public class GuildBuildingManager : MonoBehaviour, IInput
         }
     }
     #endregion
-    private void HeroClick(GameObject go)
+    private void HeroClick(GameObject go, GameObject prefab = null)
     {
+        if (prefab == null)
+        {
+            prefab = HeroDetailsUI;
+        }
         if (go.CompareTag("UI#HERO"))
         {
             Hero hero = go.GetComponent<GuildHero>().Hero;
-            this.OpenHeroDetails(hero);
+            this.OpenHeroDetails(hero, prefab);
         }
+    }
+
+    public void SellHero(Hero hero)
+    {
+        (GameObject.Find("BuildingInterface_Guild").GetComponent<GuildBuildingManager>().building as Guild).Heroes.Remove(hero);
+        this.DestroyHeroGameobject(hero);
+        Debug.Log("Sold this hero");
+        SwitchTo(gameObject);
     }
 
 }
@@ -319,7 +350,7 @@ class UIHandler
         {
             this.guildBuildingManager.IState = GuildInterfaceState.Dungeons;
         }
-        else if (newUI.name == "UI_Guild_Hero_Details")
+        else if (newUI.name == "UI_Guild_Hero_Details" || newUI.name == "UI_Guild_Hero_Details_Shop")
         {
             this.guildBuildingManager.IState = GuildInterfaceState.heroDetails;
         }

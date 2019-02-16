@@ -20,7 +20,6 @@ public class GuildRecrutation : MonoBehaviour
 
     private void GenerateHeroes(int amount)
     {
-        heroesCount -= amount;
         for (int i = 0; i < amount; i++)
         {
             var newHero = Instantiate(heroPreviewPrefab, HeroList.transform);

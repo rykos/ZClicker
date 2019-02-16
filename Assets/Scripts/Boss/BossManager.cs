@@ -39,7 +39,6 @@ public class BossManager : MonoBehaviour
                 boss.Time = 0;
                 boss.timerActive = false;
                 boss.Vulnerable = false;
-
             }
         }
     }
