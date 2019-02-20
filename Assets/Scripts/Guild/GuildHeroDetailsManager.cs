@@ -28,6 +28,12 @@ public class GuildHeroDetailsManager : MonoBehaviour
         activeHero = hero;
         Name_TMP.text = hero.Name;
         Level_TMP.text = hero.Level.level.ToString();
+        Transform stats = GameObject.Find("Stats").transform;
+        foreach (Transform child in stats)
+        {
+            child.GetComponent<StatManager>().StatUpdate(hero);
+        }
+        GameObject.Find("Ability").GetComponent<AbilityManager>().AbilityUpdate(hero.Ability);
     }
 
     public void ExitHeroDetials()

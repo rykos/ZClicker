@@ -46,13 +46,15 @@ public class Hero
     public string Name;//Hero name
     public List<Item> Items;//Equipped items
     public HeroStats Stats;//Base stats
+    public Ability Ability;//Hero special ability
 
     public Hero(string name, Level level)
     {
         this.Name = name;
         this.Level = level;
         this.Items = new List<Item>();
-        this.Stats = new HeroStats();
+        this.Stats = new HeroStats(this);
+        this.Ability = new PartyHeal(this);
     }
 }
 
@@ -65,14 +67,14 @@ public class HeroStats//Can be alternated by external sources
     private List<Buff> buffs;
     private HeroStats basicStats;//Unchanged values
 
-    public HeroStats(bool basicStats = false)
+    public HeroStats(Hero hero, bool basicStats = false)
     {
-        this.DPS = 0;
+        this.DPS = 10;
         this.Health = 100;
-        this.SpellPower = 0;
+        this.SpellPower = 5;
         if (basicStats == false)
         {
-            this.basicStats = new HeroStats(true);
+            this.basicStats = new HeroStats(hero, true);
             buffs = new List<Buff>();
         }
     }
@@ -81,15 +83,15 @@ public class HeroStats//Can be alternated by external sources
     {
         BigFloat rawDps = basicStats.DPS;
         rawDps += CollectBuffValues(StatType.dps, BuffAlternationType.AddValue);
-        rawDps *= CollectBuffValues(StatType.dps, BuffAlternationType.MultiplyValue);
+        rawDps *= 1 + CollectBuffValues(StatType.dps, BuffAlternationType.MultiplyValue);
         //
         BigFloat rawHealth = basicStats.Health;
         rawHealth += CollectBuffValues(StatType.health, BuffAlternationType.AddValue);
-        rawHealth *= CollectBuffValues(StatType.health, BuffAlternationType.MultiplyValue);
+        rawHealth *= 1 + CollectBuffValues(StatType.health, BuffAlternationType.MultiplyValue);
         //
         BigFloat rawSpellPower = basicStats.SpellPower;
         rawSpellPower += CollectBuffValues(StatType.spellPower, BuffAlternationType.AddValue);
-        rawSpellPower *= CollectBuffValues(StatType.spellPower, BuffAlternationType.MultiplyValue);
+        rawSpellPower *= 1 + CollectBuffValues(StatType.spellPower, BuffAlternationType.MultiplyValue);
 
         this.DPS = rawDps;
         this.Health = rawHealth;

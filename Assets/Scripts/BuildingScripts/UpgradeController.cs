@@ -473,4 +473,9 @@ public struct BigFloatString
     {
         return new BigFloatString(bigFloat.baseNumber, bigFloat.exponentChar.ToString());
     }
+
+    public string ShortString()
+    {
+        return $"{Value:0.}{Exponent}";
+    }
 }
